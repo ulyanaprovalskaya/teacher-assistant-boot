@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+</head>
+<body>
+<header th:insert="menu.html"></header>
+<div class="filter">
+    <form class="form-inline">
+        <span class="form-group row">
+
+        <label for="dateFrom"><span th:text="#{lessons.at}"></span></label>
+        <input id="dateFrom" type="date" class="form-control"/>
+        <label for="dateTo">-</label>
+        <input id="dateTo" type="date" class="form-control"/>
+
+        <span class="month-buttons">
+            <button class="form-control">1</button>
+            <button class="form-control">2</button>
+            <button class="form-control">3</button>
+            <button class="form-control">4</button>
+            <button class="form-control">5</button>
+        </span>
+
+
+            <label for="stream"><span th:text="#{lessons.stream}"></span></label>
+            <select id="stream" class="form-control" style="width: 200px;">
+                <option selected><span th:text="#{select.stream}"></span></option>
+            </select>
+
+        <span class="form-check form-check-inline">
+            <input id="closed" type="checkbox" class="form-check-input"/>
+            <label for="closed"><span th:text="#{lessons.closed}"></span></label>
+        </span>
+
+        <span class="form-check form-check-inline">
+            <input id="past" type="checkbox" class="form-check-input"/>
+            <label for="past" class="form-check-label"><span th:text="#{lessons.past}"></span></label>
+        </span>
+
+        <span class="form-check form-check-inline">
+            <input id="loadNotes" type="checkbox" class="form-check-input"/>
+            <label for="loadNotes" class="form-check-label fa fa-info-circle"></label>
+        </span>
+
+        <label for="schedule"><span th:text="#{lessons.time}"></span></label>
+        <select id="schedule" class="form-control" style="width: 130px;">
+            <option selected><span th:text="#{select.empty}"></span></option>
+        </select>
+
+            <label for="discipline"><span th:text="#{lessons.discipline}"></span></label>
+            <select id="discipline" class="form-control" style="width: 300px;">
+                <option selected><span th:text="#{select.discipline}"></span></option>
+            </select>
+
+            <label for="type"><span th:text="#{lessons.type}"></span></label>
+            <select id="type" class="form-control">
+                <option selected><span th:text="#{select.lessonType}"></span></option>
+            </select>
+
+            <label for="group"><span th:text="#{lessons.group}"></span></label>
+            <select id="group" class="form-control" style="width: 230px;">
+                <option selected><span th:text="#{select.group}"></span></option>
+            </select>
+
+        <input type="submit" class="btn btn-primary fa fa-fw fa-search" style="width: 100px" th:value="#{btn.search}"/>
+        </span>
+    </form>
+</div>
+</body>
+</html>
