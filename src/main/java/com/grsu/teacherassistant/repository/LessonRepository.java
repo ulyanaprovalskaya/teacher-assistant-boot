@@ -5,6 +5,8 @@ import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface LessonRepository extends CrudRepository<Lesson, Integer> {
@@ -17,4 +19,6 @@ public interface LessonRepository extends CrudRepository<Lesson, Integer> {
     @Query("SELECT l FROM Lesson l JOIN StudentLesson stl JOIN Student s JOIN StudentGroup sg " +
         "WHERE stl.student.id = ?1 AND stl.registered = true AND  l.group.id <> sg.id")
     List<AdditionalLesson> getStudentAdditionalLessons(Integer studentId);
+
+    List<Lesson> getLessonByDateBetween(LocalDateTime from, LocalDateTime to);
 }

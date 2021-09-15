@@ -918,3 +918,7 @@ body {
 .forty-width{
     width: 100px;
 }
+
+.filter label{
+	margin-top: 5px;
+}

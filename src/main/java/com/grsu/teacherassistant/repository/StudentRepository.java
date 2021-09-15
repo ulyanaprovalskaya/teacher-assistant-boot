@@ -1,5 +1,6 @@
 package com.grsu.teacherassistant.repository;
 
+import com.grsu.teacherassistant.model.entity.LessonType;
 import com.grsu.teacherassistant.model.entity.Student;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -48,6 +49,10 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
     //
     @Query("SELECT st FROM Student st JOIN StudentLesson sl JOIN Lesson l JOIN Schedule sch JOIN Stream JOIN Discipline d " +
         "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2")
-    Integer getStudentTotalSkipsAmount(Integer studentId, Integer disciplineId, Integer lessonId);
+    Integer getStudentTotalSkipsAmount(Integer studentId, Integer disciplineId);
+
+    @Query("SELECT st FROM Student st JOIN StudentLesson sl JOIN Lesson l JOIN Schedule sch JOIN Stream JOIN Discipline d " +
+            "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2 AND l.type = ?3")
+    Integer getStudentSkipsAmountByLessonType(Integer studentId, Integer disciplineId, LessonType lessonType);
 
 }

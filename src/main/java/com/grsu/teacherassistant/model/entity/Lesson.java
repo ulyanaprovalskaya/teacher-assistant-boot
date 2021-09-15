@@ -1,6 +1,5 @@
 package com.grsu.teacherassistant.model.entity;
 
-import com.grsu.teacherassistant.model.converter.LessonTypeAttributeConverter;
 import com.grsu.teacherassistant.model.converter.LocalDateTimeAttributeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,8 +51,8 @@ public class Lesson extends AssistantEntity {
     @JoinColumn(name = "stream_id", referencedColumnName = "id")
     private Stream stream;
 
-    @Convert(converter = LessonTypeAttributeConverter.class)
-    @Column(name = "type_id")
+    @ManyToOne
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
     private LessonType type;
 
     @Column(name = "index_number")

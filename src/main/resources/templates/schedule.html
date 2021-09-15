@@ -3,77 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <title>Schedule</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
 </head>
 <body>
-<header th:insert="menu.html"></header>
-<div class="filter">
-    <form class="form-inline">
-        <span class="form-group row">
+<header th:insert="menu.html :: nav"></header>
 
-        <label for="dateFrom"><span th:text="#{lessons.at}"></span></label>
-        <input id="dateFrom" type="date" class="form-control"/>
-        <label for="dateTo">-</label>
-        <input id="dateTo" type="date" class="form-control"/>
+<form class="filter" th:action="@{/schedule}" th:object="${scheduleFilter}" method="get" style="margin: 20px">
+    <div class="form-row" style="margin-bottom: 20px">
+        <div class="col-md-auto">
+            <label for="dateFrom"><span th:text="#{lessons.at}"></span></label>
+        </div>
+        <div class="col-md-2">
+            <input id="dateFrom" type="date" class="form-control" name="dateFrom" th:field="*{dateFrom}"
+                   th:value="*{dateFrom}"/>
+        </div>
 
-        <span class="month-buttons">
-            <button class="form-control">1</button>
-            <button class="form-control">2</button>
-            <button class="form-control">3</button>
-            <button class="form-control">4</button>
-            <button class="form-control">5</button>
-        </span>
+        <div class="col-md-auto">
+            <label for="dateTo">-</label>
+        </div>
+        <div class="col-md-2">
+            <input id="dateTo" type="date" class="form-control" th:field="*{dateTo}" th:value="*{dateFrom}"/>
+        </div>
 
-
+        <div class="col-md-auto">
             <label for="stream"><span th:text="#{lessons.stream}"></span></label>
-            <select id="stream" class="form-control" style="width: 200px;">
+        </div>
+        <div class="col-md-3">
+            <select id="stream" class="form-control">
                 <option selected><span th:text="#{select.stream}"></span></option>
+                <option th:each="stream : ${streams}"
+                        th:value="${stream.id}"
+                        th:utext="${stream.name}"></option>
             </select>
+        </div>
 
-        <span class="form-check form-check-inline">
-            <input id="closed" type="checkbox" class="form-check-input"/>
-            <label for="closed"><span th:text="#{lessons.closed}"></span></label>
-        </span>
+        <span class="col-md-auto form-check form-check-inline">
+                <input id="closed" type="checkbox" class="form-check-input"/>
+                <label for="closed" class="form-check-label"><span th:text="#{lessons.closed}"></span></label>
+            </span>
 
-        <span class="form-check form-check-inline">
+        <span class="col-md-auto form-check form-check-inline">
             <input id="past" type="checkbox" class="form-check-input"/>
             <label for="past" class="form-check-label"><span th:text="#{lessons.past}"></span></label>
         </span>
 
-        <span class="form-check form-check-inline">
+        <span class="col-md-auto form-check form-check-inline">
             <input id="loadNotes" type="checkbox" class="form-check-input"/>
             <label for="loadNotes" class="form-check-label fa fa-info-circle"></label>
         </span>
 
-        <label for="schedule"><span th:text="#{lessons.time}"></span></label>
-        <select id="schedule" class="form-control" style="width: 130px;">
-            <option selected><span th:text="#{select.empty}"></span></option>
-        </select>
-
-            <label for="discipline"><span th:text="#{lessons.discipline}"></span></label>
-            <select id="discipline" class="form-control" style="width: 300px;">
-                <option selected><span th:text="#{select.discipline}"></span></option>
+        <div class="col-md-auto">
+            <label for="schedule"><span th:text="#{lessons.time}"></span></label>
+        </div>
+        <div class="col-md-2">
+            <select id="schedule" class="form-control">
+                <option selected><span th:text="#{select.empty}"></span></option>
+                <option th:each="time : ${lessonsTime}"
+                        th:value="${time.id}"
+                        th:utext="${time.getCaption()}"></option>
             </select>
+        </div>
+    </div>
 
+    <div class="form-row">
+        <div class="col-md-0.5">
+            <label for="discipline"><span th:text="#{lessons.discipline}"></span></label>
+        </div>
+        <div class="col-md-3">
+            <select id="discipline" class="form-control" >
+                <option selected><span th:text="#{select.discipline}"></span></option>
+                <option th:each="discipline : ${disciplines}"
+                        th:value="${discipline.id}"
+                        th:utext="${discipline.name}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-0.5">
             <label for="type"><span th:text="#{lessons.type}"></span></label>
+        </div>
+        <div class="col-md-3">
             <select id="type" class="form-control">
                 <option selected><span th:text="#{select.lessonType}"></span></option>
+                <option th:each="type : ${lessonTypes}"
+                        th:value="${type.id}"
+                        th:utext="${type.name}"></option>
             </select>
+        </div>
 
+        <div class="col-md-0.5">
             <label for="group"><span th:text="#{lessons.group}"></span></label>
-            <select id="group" class="form-control" style="width: 230px;">
+        </div>
+        <div class="col-md-3">
+            <select id="group" class="form-control">
                 <option selected><span th:text="#{select.group}"></span></option>
+                <option th:each="group : ${groups}"
+                        th:value="${group.id}"
+                        th:utext="${group.name}"></option>
             </select>
+        </div>
 
-        <input type="submit" class="btn btn-primary fa fa-fw fa-search" style="width: 100px" th:value="#{btn.search}"/>
-        </span>
-    </form>
-</div>
+        <div class="col-md-2.5">
+            <input type="submit" class="btn btn-primary fa fa-fw fa-search" style="width: 150%; height: 100%"
+                   th:value="#{btn.search}"/>
+        </div>
+    </div>
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

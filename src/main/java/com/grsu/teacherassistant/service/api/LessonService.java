@@ -11,6 +11,6 @@ public interface LessonService {
 
     void deleteLesson(Integer lessonId);
 
-    List<Lesson> getAll(LocalDate dateFrom, LocalDate dateTo);
+    List<Lesson> getAllByDateBetween(LocalDate dateFrom, LocalDate dateTo);
 
 }

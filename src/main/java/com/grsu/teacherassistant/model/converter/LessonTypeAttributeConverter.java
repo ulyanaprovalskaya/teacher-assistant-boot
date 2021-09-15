@@ -14,11 +14,11 @@ public class LessonTypeAttributeConverter implements AttributeConverter<LessonTy
 
 	@Override
 	public Integer convertToDatabaseColumn(LessonType lessonType) {
-		return lessonType.getCode();
+		return null;//lessonType.getCode();
 	}
 
 	@Override
 	public LessonType convertToEntityAttribute(Integer code) {
-		return LessonType.getLessonTypeByCode(code);
+		return null;//LessonType.getLessonTypeByCode(code);
 	}
 }

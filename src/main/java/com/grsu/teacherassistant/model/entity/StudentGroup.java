@@ -28,7 +28,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "GROUP")
+@Table(name = "STUDY_GROUP")
 public class StudentGroup extends AssistantEntity {
 
     @Column(name = "name")
