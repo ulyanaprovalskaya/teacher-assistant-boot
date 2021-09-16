@@ -1,4 +1,4 @@
-package com.grsu.teacherassitant.dto;
+package com.grsu.teacherassistant.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

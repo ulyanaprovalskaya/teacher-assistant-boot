@@ -1,10 +1,10 @@
 package com.grsu.teacherassistant.service.api;
 
-import com.grsu.teacherassistant.model.entity.Schedule;
+import com.grsu.teacherassistant.dto.ScheduleDto;
 
 import java.util.List;
 
 public interface ScheduleService {
 
-    List<Schedule> getAll();
+    List<ScheduleDto> getAll();
 }

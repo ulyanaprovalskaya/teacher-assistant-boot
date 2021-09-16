@@ -1,5 +1,6 @@
 package com.grsu.teacherassistant.service.impl;
 
+import com.grsu.teacherassistant.dto.StudentDto;
 import com.grsu.teacherassistant.model.entity.LessonType;
 import com.grsu.teacherassistant.model.entity.Student;
 import com.grsu.teacherassistant.repository.LessonRepository;
@@ -7,6 +8,7 @@ import com.grsu.teacherassistant.repository.StudentRepository;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
 import com.grsu.teacherassistant.service.api.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,6 +20,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final LessonRepository lessonRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<AdditionalLesson> getStudentAdditionalLessons(Integer studentId, Integer disciplineId) {
@@ -35,8 +38,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void createStudent(Student student) {
-        studentRepository.save(student);
+    public void createStudent(StudentDto student) {
+        studentRepository.save(modelMapper.map(student, Student.class));
     }
 
     @Override
@@ -46,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void editStudent(Student student) {
+    public void editStudent(StudentDto studentDto) {
 
     }
 }

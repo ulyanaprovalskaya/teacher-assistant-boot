@@ -1,17 +1,17 @@
 package com.grsu.teacherassistant.service.api;
 
-import com.grsu.teacherassistant.model.entity.Discipline;
+import com.grsu.teacherassistant.dto.DisciplineDto;
 
 import java.util.List;
 
 public interface DisciplineService {
 
-    void createDiscipline(Discipline discipline);
+    void createDiscipline(DisciplineDto discipline);
 
     void deleteDiscipline(Integer id);
 
-    void editDiscipline(Discipline discipline);
+    void editDiscipline(DisciplineDto discipline);
 
-    List<Discipline> getAll();
+    List<DisciplineDto> getAll();
 
 }

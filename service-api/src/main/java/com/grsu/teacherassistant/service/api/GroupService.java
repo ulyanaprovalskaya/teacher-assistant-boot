@@ -1,19 +1,19 @@
 package com.grsu.teacherassistant.service.api;
 
-import com.grsu.teacherassistant.model.entity.Student;
-import com.grsu.teacherassistant.model.entity.StudentGroup;
+import com.grsu.teacherassistant.dto.StudentDto;
+import com.grsu.teacherassistant.dto.StudentGroupDto;
 
 import java.util.List;
 
 public interface GroupService {
 
-    void createGroup(StudentGroup group);
+    void createGroup(StudentGroupDto group);
 
     void deleteGroup(Integer id);
 
-    List<StudentGroup> getAll();
+    List<StudentGroupDto> getAll();
 
-    List<StudentGroup> getActive();
+    List<StudentGroupDto> getActive();
 
-    void addStudentToGroup(Student student, StudentGroup group);
+    void addStudentToGroup(StudentDto student, StudentGroupDto group);
 }

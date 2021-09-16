@@ -1,7 +1,7 @@
 package com.grsu.teacherassistant.controller;
 
 import com.grsu.teacherassistant.model.entity.Lesson;
-import com.grsu.teacherassitant.dto.ScheduleFilterDto;
+import com.grsu.teacherassistant.dto.ScheduleFilterDto;
 import com.grsu.teacherassistant.service.api.DisciplineService;
 import com.grsu.teacherassistant.service.api.GroupService;
 import com.grsu.teacherassistant.service.api.LessonService;
