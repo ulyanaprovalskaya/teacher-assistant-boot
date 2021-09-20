@@ -10,7 +10,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFile" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false" style="height: 50px; width: 70px;">
+                   aria-haspopup="true" aria-expanded="false" >
                     <i class="fa fa-fw fa-file"></i><span th:text="#{menu.file}"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownFile">
@@ -58,7 +58,7 @@
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownModes" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-fw fa-list-alt"></i><span>Modes</span>
+                    <i class="fa fa-fw fa-list-alt"></i><span th:text="#{menu.modes}"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownModes">
                     <a class="dropdown-item" href="#"><i class="fa fa-fw fa-rss"></i><span th:text="#{option.registrationMode}"></span></a>
@@ -68,13 +68,14 @@
                     <a class="dropdown-item" href="#"><i class="fa fa-fw fa-user"></i><span th:text="#{option.studentMode}"></span></a>
                 </div>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+        </ul>
+
+        <span class="navbar-text">
+            <a class="nav-link" href="#" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-fw fa-plus"></i><span th:text="#{menu.new.lesson}"></span>
                 </a>
-            </li>
-        </ul>
+        </span>
 
         <span class="navbar-text">
             <a class="nav-link" href="#" role="button" data-toggle="dropdown"

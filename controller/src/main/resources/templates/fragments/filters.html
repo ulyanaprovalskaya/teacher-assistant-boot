@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Filters</title>
@@ -25,7 +25,7 @@
         <div class="col-md-auto">
             <label for="stream"><span th:text="#{lessons.stream}"></span></label>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <select id="stream" class="form-control">
                 <option selected><span th:text="#{select.stream}"></span></option>
                 <option th:each="stream : ${streams}"
