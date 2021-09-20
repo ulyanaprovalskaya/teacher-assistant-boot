@@ -23,12 +23,12 @@ public class LocaleConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
-    @Bean(name = "localeResolver")
+    /*@Bean(name = "localeResolver")
     public LocaleResolver getLocaleResolver()  {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setDefaultLocale(Locale.ENGLISH);
         return resolver;
-    }
+    }*/
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
