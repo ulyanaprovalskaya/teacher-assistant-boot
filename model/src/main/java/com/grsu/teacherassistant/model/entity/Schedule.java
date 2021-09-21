@@ -46,10 +46,6 @@ public class Schedule extends AssistantEntity {
     @JoinColumn(name = "version_id", referencedColumnName = "id")
     private ScheduleVersion version;
 
-    public String getCaption() {
-        return String.format("[%s] %s - %s", number, begin, end);
-    }
-
     public String getTime() {
         return String.format("%s - %s", begin, end);
     }

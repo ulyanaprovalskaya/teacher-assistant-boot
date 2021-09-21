@@ -4,7 +4,10 @@ import com.grsu.teacherassistant.service.api.DisciplineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -18,5 +21,16 @@ public class DisciplineController {
     public String showDisciplines(Model model){
         model.addAttribute("disciplines", disciplineService.getAll());
         return "disciplines";
+    }
+
+    @PostMapping
+    public String addDiscipline(Model model){
+        return "schedule";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteDiscipline(@PathVariable Integer id){
+        disciplineService.deleteDiscipline(id);
+        return "disciplines :: disciplinesFragment";
     }
 }

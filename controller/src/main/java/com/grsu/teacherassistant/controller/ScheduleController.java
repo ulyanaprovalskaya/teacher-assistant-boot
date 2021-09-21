@@ -1,6 +1,6 @@
 package com.grsu.teacherassistant.controller;
 
-import com.grsu.teacherassistant.model.entity.Lesson;
+import com.grsu.teacherassistant.dto.LessonDto;
 import com.grsu.teacherassistant.dto.ScheduleFilterDto;
 import com.grsu.teacherassistant.service.api.DisciplineService;
 import com.grsu.teacherassistant.service.api.GroupService;
@@ -45,7 +45,7 @@ public class ScheduleController {
         scheduleFilterDto.setDateFrom(dateFrom);
         scheduleFilterDto.setDateTo(dateTo);
 
-        List<Lesson> lessons = lessonService.getAllByDateBetween(scheduleFilterDto.getDateFrom(), scheduleFilterDto.getDateTo());
+        List<LessonDto> lessons = lessonService.getAllByDateBetween(scheduleFilterDto.getDateFrom(), scheduleFilterDto.getDateTo());
         model.addAttribute("filteredLessons", lessons);
         model.addAttribute("streams", streamService.getAll());
         model.addAttribute("groups", groupService.getAll());

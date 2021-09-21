@@ -8,4 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class LessonTypeDto {
+
+    private Integer id;
+    private String name;
 }

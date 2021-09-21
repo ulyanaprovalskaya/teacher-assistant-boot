@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Disciplines</title>
@@ -11,7 +11,28 @@
 <body>
 <header th:insert="fragments/menu.html :: nav"></header>
 
-
+<table th:fragment="disciplinesFragment" class="table table-stripped table-bordered" style="margin-top: 10px">
+    <thead class="thead-light">
+    <tr>
+        <th th:text="#{disciplines}" style="text-align:center"></th>
+        <th th:text="Edit" style="text-align:center"></th>
+        <th th:text="Delete" style="text-align:center"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="discipline : ${disciplines}">
+        <td th:text="${discipline.name}" style="width: 85%"></td>
+        <td style="text-align:center">
+            <button type="button" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></button>
+        </td>
+        <td style="text-align:center">
+            <form th:action="@{/disciplines/{id}(id=${discipline.id})}" th:method="delete">
+                <input type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></input>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
