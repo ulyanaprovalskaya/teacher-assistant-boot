@@ -20,15 +20,16 @@ public class LocaleConfig implements WebMvcConfigurer {
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages/messages");
+        messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
 
-    @Bean(name = "localeResolver")
+    /*@Bean(name = "localeResolver")
     public LocaleResolver getLocaleResolver()  {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setDefaultLocale(Locale.ENGLISH);
         return resolver;
-    }
+    }*/
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
