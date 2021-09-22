@@ -5,12 +5,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet author="ulyana" id="1">
-        <sqlFile dbms="h2" path="sql/dump_ta.sql" relativeToChangelogFile="true" />
+        <sqlFile dbms="h2" path="sql/create_tables.sql" relativeToChangelogFile="true" />
     </changeSet>
-    <changeSet id="2" author="ulyana">
-        <sql dbms="h2">alter table STUDENT add column record_book TEXT;</sql>
-    </changeSet>
-    <changeSet id="3" author="ulyana">
-        <sql dbms="h2">alter table LESSON_TYPE add column type TEXT;</sql>
+    <changeSet author="ulyana" id="2">
+        <sqlFile dbms="h2" path="sql/db-16.09.2021.sql" relativeToChangelogFile="true" />
     </changeSet>
 </databaseChangeLog>
