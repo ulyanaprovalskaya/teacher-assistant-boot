@@ -8,10 +8,12 @@ public interface DisciplineService {
 
     void createDiscipline(DisciplineDto discipline);
 
+    void updateDiscipline(DisciplineDto discipline);
+
     void deleteDiscipline(Integer id);
 
-    void editDiscipline(DisciplineDto discipline);
-
     List<DisciplineDto> getAll();
+
+    DisciplineDto getById(Integer id);
 
 }

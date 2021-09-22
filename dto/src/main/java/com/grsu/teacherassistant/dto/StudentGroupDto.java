@@ -13,7 +13,7 @@ import java.util.List;
 public class StudentGroupDto {
 
     private Integer id;
-    private String names;
+    private String name;
     private boolean active;
     private LocalDateTime expirationDate;
     private List<StudentDto> students;

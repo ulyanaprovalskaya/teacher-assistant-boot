@@ -1,14 +1,14 @@
 package com.grsu.teacherassistant.service.impl;
 
+import com.grsu.teacherassistant.dto.DisciplineDto;
 import com.grsu.teacherassistant.model.entity.Discipline;
 import com.grsu.teacherassistant.repository.DisciplineRepository;
 import com.grsu.teacherassistant.service.api.DisciplineService;
-import com.grsu.teacherassistant.dto.DisciplineDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +21,13 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public void createDiscipline(DisciplineDto disciplineDto) {
+        disciplineDto.setCreateDate(LocalDateTime.now());
+        disciplineDto.setActive(true);
+        disciplineRepository.save(modelMapper.map(disciplineDto, Discipline.class));
+    }
+
+    @Override
+    public void updateDiscipline(DisciplineDto disciplineDto) {
         disciplineRepository.save(modelMapper.map(disciplineDto, Discipline.class));
     }
 
@@ -29,11 +36,6 @@ public class DisciplineServiceImpl implements DisciplineService {
         disciplineRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public void editDiscipline(DisciplineDto disciplineDto) {
-
-    }
 
     @Override
     public List<DisciplineDto> getAll() {
@@ -41,5 +43,10 @@ public class DisciplineServiceImpl implements DisciplineService {
                 .stream()
                 .map(d -> modelMapper.map(d, DisciplineDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public DisciplineDto getById(Integer id) {
+        return modelMapper.map(disciplineRepository.findById(id), DisciplineDto.class);
     }
 }

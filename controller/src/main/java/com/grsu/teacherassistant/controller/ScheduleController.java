@@ -1,5 +1,6 @@
 package com.grsu.teacherassistant.controller;
 
+import com.grsu.teacherassistant.dto.DisciplineDto;
 import com.grsu.teacherassistant.dto.LessonDto;
 import com.grsu.teacherassistant.dto.ScheduleFilterDto;
 import com.grsu.teacherassistant.service.api.DisciplineService;
@@ -52,6 +53,7 @@ public class ScheduleController {
         model.addAttribute("disciplines", disciplineService.getAll());
         model.addAttribute("lessonTypes", lessonTypeService.getAll());
         model.addAttribute("lessonsTime", scheduleService.getAll());
+        model.addAttribute("discipline", new DisciplineDto());
         return "schedule";
     }
 }

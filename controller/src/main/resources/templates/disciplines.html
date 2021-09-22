@@ -4,30 +4,32 @@
     <meta charset="UTF-8">
     <title>Disciplines</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../css.css">
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body>
-<header th:insert="fragments/menu.html :: nav"></header>
+<header th:insert="fragments/menu.html :: menu"></header>
 
 <table th:fragment="disciplinesFragment" class="table table-stripped table-bordered" style="margin-top: 10px">
     <thead class="thead-light">
     <tr>
         <th th:text="#{disciplines}" style="text-align:center"></th>
-        <th th:text="Edit" style="text-align:center"></th>
-        <th th:text="Delete" style="text-align:center"></th>
+        <th th:text="#{option.edit}" style="text-align:center"></th>
+        <th th:text="#{option.remove}" style="text-align:center"></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="discipline : ${disciplines}">
         <td th:text="${discipline.name}" style="width: 85%"></td>
         <td style="text-align:center">
-            <button type="button" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></button>
+            <button class="btn btn-outline-info" data-toggle="modal" th:data-target="${#strings.concat('#editDiscipline', discipline.id)}">
+                <i class="fa fa-fw fa-pencil"></i></button>
+            <div th:replace="dialogs/disciplineInfo.html :: dialog(dialogId=${#strings.concat('editDiscipline', discipline.id)}, id=${discipline.id},
+             name=${discipline.name}, description=${discipline.description})"></div>
         </td>
         <td style="text-align:center">
             <form th:action="@{/disciplines/{id}(id=${discipline.id})}" th:method="delete">
-                <input type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></input>
+                <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
             </form>
         </td>
     </tr>
