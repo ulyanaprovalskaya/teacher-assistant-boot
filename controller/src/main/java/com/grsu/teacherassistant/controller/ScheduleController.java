@@ -49,7 +49,7 @@ public class ScheduleController {
         scheduleFilterDto.setDateTo(dateTo);
 
         List<LessonDto> lessons = lessonService.getAllByDateBetween(scheduleFilterDto.getDateFrom(), scheduleFilterDto.getDateTo());
-        model.addAttribute("filteredLessons", lessons);
+        model.addAttribute("lessons", lessons);
         model.addAttribute("streams", streamService.getAll());
         model.addAttribute("groups", groupService.getAll());
         model.addAttribute("disciplines", disciplineService.getAll());

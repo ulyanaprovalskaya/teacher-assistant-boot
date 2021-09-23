@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lessons</title>
+</head>
+<body>
+<table th:fragment="lessons" class="table table-stripped table-bordered margin10">
+    <thead class="thead-light">
+    <tr>
+        <th th:text="#{lessons.stream}"></th>
+        <th th:text="#{lessons.discipline}"></th>
+        <th th:text="#{lessons.date}"></th>
+        <th th:text="#{lessons.time}"></th>
+        <th th:text="#{lessons.type}"></th>
+        <th th:text="#{lessons.group}"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lesson : ${lessons}">
+        <td th:text="${lesson.stream.name}"></td>
+        <td th:text="${lesson.stream.discipline.name}"></td>
+        <td th:text="${lesson.date}"></td>
+        <td th:text="1"></td>
+        <td th:text="${lesson.type}"></td>
+        <td th:text="${lesson.group}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
