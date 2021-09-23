@@ -41,10 +41,7 @@ public class StudentGroup extends AssistantEntity {
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "STREAM_GROUP",
-        joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "stream_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "groups", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Stream> streams;
 

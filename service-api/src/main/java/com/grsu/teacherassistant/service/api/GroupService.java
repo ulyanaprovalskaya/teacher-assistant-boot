@@ -15,5 +15,7 @@ public interface GroupService {
 
     List<StudentGroupDto> getActive();
 
+    List<StudentGroupDto> getGroupsByStreamId(Integer id);
+
     void addStudentToGroup(StudentDto student, StudentGroupDto group);
 }

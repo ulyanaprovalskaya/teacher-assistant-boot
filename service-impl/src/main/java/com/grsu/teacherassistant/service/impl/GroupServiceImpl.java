@@ -48,6 +48,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<StudentGroupDto> getGroupsByStreamId(Integer id) {
+        return groupRepository.findAllByStreamId(id)
+                .stream()
+                .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public void addStudentToGroup(StudentDto studentDto, StudentGroupDto groupDto) {
         Student student = modelMapper.map(studentDto, Student.class);

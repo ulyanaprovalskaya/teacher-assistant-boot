@@ -14,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -55,5 +57,11 @@ public class ScheduleController {
         model.addAttribute("lessonsTime", scheduleService.getAll());
         model.addAttribute("discipline", new DisciplineDto());
         return "schedule";
+    }
+
+    @GetMapping("/streams/{id}")
+    private String getGroupsByStreamId(Model model, @PathVariable Integer id) {
+        model.addAttribute("groups", groupService.getGroupsByStreamId(id));
+        return "fragments/filterSelectGroup";
     }
 }
