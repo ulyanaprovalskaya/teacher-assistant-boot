@@ -10,4 +10,10 @@
     <changeSet author="ulyana" id="2">
         <sqlFile dbms="h2" path="sql/db-16.09.2021.sql" relativeToChangelogFile="true" />
     </changeSet>
+    <changeSet author="ulyana" id="3">
+        <sql dbms="h2">
+            ALTER TABLE LESSON ADD COLUMN discipline_id INT;
+            ALTER TABLE LESSON ADD FOREIGN KEY (discipline_id) REFERENCES DISCIPLINE(id);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

@@ -5,27 +5,54 @@
     <title>Lessons</title>
 </head>
 <body>
-<table th:fragment="lessons" class="table table-stripped table-bordered margin10">
-    <thead class="thead-light">
-    <tr>
-        <th th:text="#{lessons.stream}"></th>
-        <th th:text="#{lessons.discipline}"></th>
-        <th th:text="#{lessons.date}"></th>
-        <th th:text="#{lessons.time}"></th>
-        <th th:text="#{lessons.type}"></th>
-        <th th:text="#{lessons.group}"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="lesson : ${lessons}">
-        <td th:text="${lesson.stream.name}"></td>
-        <td th:text="${lesson.stream.discipline.name}"></td>
-        <td th:text="${lesson.date}"></td>
-        <td th:text="1"></td>
-        <td th:text="${lesson.type}"></td>
-        <td th:text="${lesson.group}"></td>
-    </tr>
-    </tbody>
-</table>
+<div th:fragment="lessons">
+    <table class="table table-stripped table-bordered margin10">
+        <thead class="thead-light">
+        <tr>
+            <th th:text="#{lessons.stream}"></th>
+            <th th:text="#{lessons.discipline}"></th>
+            <th th:text="#{lessons.date}"></th>
+            <th th:text="#{lessons.time}"></th>
+            <th th:text="#{lessons.type}"></th>
+            <th th:text="#{lessons.group}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lesson : ${lessons.page}">
+            <td th:text="${lesson.stream.name}"></td>
+            <td th:text="${lesson.discipline.name}"></td>
+            <td th:text="${#temporals.format(lesson.date, 'dd-MM-yyyy')}"></td>
+            <td th:text="${lesson.schedule.getCaption()}"></td>
+            <td th:text="${lesson.type.name}"></td>
+            <td>
+                <span th:if="${lesson.group != null}" th:text="${lesson.group.name}"></span>
+                <span th:if="${lesson.group == null}" th:text="#{label.all.groups}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Pagination" class="paging">
+        <ul class="pagination justify-content-center"  th:if="${lessons.getTotal() > 1}">
+            <li class="page-item" th:classappend="${!lessons.paging.isPrevEnabled()? 'disabled' : ''}">
+                <a class="page-link" th:href="@{'/?pageNumber=' + ${lessons.paging.pageNumber - 1}}"
+                   tabindex="-1">Previous</a>
+            </li>
+            <th:block th:each="item : ${lessons.paging.getItems()}">
+                <li class="page-item" th:classappend="${item.index == lessons.paging.pageNumber? 'active' : ''}"
+                    th:if="${item.pageItemType.name() == 'PAGE'}">
+                    <a class="page-link" th:href="@{'/?pageNumber=' + ${item.index}}"
+                       th:text="${item.index}"></a>
+                </li>
+                <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                    <a class="page-link" href="#">...</a>
+                </li>
+            </th:block>
+            <li class="page-item" th:classappend="${!lessons.paging.isNextEnabled()? 'disabled' : ''}">
+                <a class="page-link" th:href="@{'/?pageNumber=' + ${lessons.paging.pageNumber + 1}}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 </body>
 </html>

@@ -5,7 +5,7 @@
     <title>Filters</title>
 </head>
 <body>
-<form class="filter" th:action="@{/schedule}" th:object="${scheduleFilter}" method="get" style="margin: 20px">
+<form class="filter" th:action="@{/schedule}" th:object="${scheduleFilter}" method="post" style="margin: 20px">
     <div class="form-row" style="margin-bottom: 20px">
         <div class="col-md-auto">
             <label for="dateFrom"><span th:text="#{lessons.at}"></span></label>
@@ -112,7 +112,7 @@
             streamSelect.change(getContent);
 
             function getContent() {
-                let url = window.location.href;
+                let url = window.location.href.split('?')[0];
                 let selectedValue = streamSelect.val();
 
                 if (Number.isInteger(selectedValue) || !isNaN(parseInt(selectedValue, 10))) {

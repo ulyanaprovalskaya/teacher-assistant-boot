@@ -20,7 +20,9 @@ public class LessonDto {
     private LessonTypeDto type;
     private Integer index;
     private StreamDto stream;
+    private DisciplineDto discipline;
     private StudentGroupDto group;
+    private ScheduleDto schedule;
     private List<NoteDto> notes;
 
 }

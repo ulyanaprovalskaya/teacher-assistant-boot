@@ -44,6 +44,10 @@ public class Discipline extends AssistantEntity {
 
     @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    private List<Lesson> lessons;
+
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Stream> streams;
 
 }

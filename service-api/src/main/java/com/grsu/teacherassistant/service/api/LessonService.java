@@ -1,9 +1,10 @@
 package com.grsu.teacherassistant.service.api;
 
 import com.grsu.teacherassistant.dto.LessonDto;
+import com.grsu.teacherassistant.paging.Paged;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface LessonService {
 
@@ -11,6 +12,6 @@ public interface LessonService {
 
     void deleteLesson(Integer lessonId);
 
-    List<LessonDto> getAllByDateBetween(LocalDate dateFrom, LocalDate dateTo);
+    Paged<LessonDto> getAllByDateBetween(LocalDate dateFrom, LocalDate dateTo, Pageable pageable);
 
 }

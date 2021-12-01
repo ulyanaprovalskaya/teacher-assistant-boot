@@ -48,6 +48,10 @@ public class Lesson extends AssistantEntity {
     private LocalDateTime date;
 
     @ManyToOne
+    @JoinColumn(name = "discipline_id", referencedColumnName = "id")
+    private Discipline discipline;
+
+    @ManyToOne
     @JoinColumn(name = "stream_id", referencedColumnName = "id")
     private Stream stream;
 

@@ -2,13 +2,15 @@ package com.grsu.teacherassistant.repository;
 
 import com.grsu.teacherassistant.model.entity.Lesson;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface LessonRepository extends CrudRepository<Lesson, Integer> {
+public interface LessonRepository extends PagingAndSortingRepository<Lesson, Integer> {
 
     /*select lt.id as lessonType, l.DATE as lessonDate, g.name as groupName from STUDENT_LESSON sl
       join STUDENT s on sl.student_id = s.id join STUDENT_GROUP sg on s.id = sg.student_id
@@ -19,5 +21,5 @@ public interface LessonRepository extends CrudRepository<Lesson, Integer> {
         "WHERE stl.student.id = ?1 AND stl.registered = true AND  l.group.id <> sg.id")
     List<AdditionalLesson> getStudentAdditionalLessons(Integer studentId);
 
-    List<Lesson> getLessonByDateBetween(LocalDateTime from, LocalDateTime to);
+    Page<Lesson> getLessonByDateBetween(LocalDateTime from, LocalDateTime to, Pageable pageable);
 }
