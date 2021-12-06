@@ -2,12 +2,14 @@ package com.grsu.teacherassistant.repository;
 
 import com.grsu.teacherassistant.model.entity.LessonType;
 import com.grsu.teacherassistant.model.entity.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface StudentRepository extends CrudRepository<Student, Integer> {
+public interface StudentRepository extends JpaRepository<Student, Integer>, JpaSpecificationExecutor<Student> {
 
     Student findByCardUid(String cardUid);
 

@@ -13,7 +13,7 @@ public final class Constants {
     public final static String SERIAL_STATUS_DB = "status: db";
 
     //BEANS
-    public final static String GROUPS_DELIMITER = ",<br/>";
+    public final static String GROUPS_DELIMITER = ",\n";
     public static final String MARK_DELIMETER = "/";
 
     //REGISTRATION TYPE

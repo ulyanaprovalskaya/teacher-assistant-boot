@@ -50,4 +50,10 @@ public class DisciplineController {
         disciplineService.deleteDiscipline(id);
         return "redirect:/disciplines";
     }
+
+    @GetMapping("/lesson/{id}")
+    public String getDisciplineByLessonId(@PathVariable Integer id){
+        disciplineService.getDisciplineByLessonId(id);
+        return "redirect:/disciplines";
+    }
 }

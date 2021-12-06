@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.grsu.teacherassistant.model.constants.Constants.GROUPS_DELIMITER;
 
 @Getter
 @Setter
@@ -21,4 +24,23 @@ public class StudentDto {
     private String phone;
     private String email;
     private List<NoteDto> notes;
+    private List<StudentGroupDto> groups;
+
+    public String getFullName() {
+        if (lastName == null) {
+            return firstName;
+        }
+        if (firstName == null) {
+            return lastName;
+        }
+        return String.join(" ", lastName, firstName);
+    }
+
+    public String getGroupNames() {
+        if (groups != null) {
+            return groups.stream().map(StudentGroupDto::getName).collect(Collectors.joining(GROUPS_DELIMITER));
+        } else {
+            return "";
+        }
+    }
 }

@@ -9,10 +9,15 @@ import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
 import com.grsu.teacherassistant.service.api.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +55,22 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void editStudent(StudentDto studentDto) {
-
     }
+
+
+    @Override
+    public Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification) {
+        return studentRepository.findAll(studentSpecification,pageable);
+    }
+
+    @Override
+    public List<StudentDto> findAllStudents(Page<Student> studentPage) {
+        return studentPage
+                .getContent()
+                .stream()
+                .map(student -> modelMapper.map(student, StudentDto.class))
+                .collect(Collectors.toList());
+    }
+
+
 }

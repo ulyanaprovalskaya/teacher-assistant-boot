@@ -2,7 +2,11 @@ package com.grsu.teacherassistant.service.api;
 
 import com.grsu.teacherassistant.dto.StudentDto;
 import com.grsu.teacherassistant.model.entity.LessonType;
+import com.grsu.teacherassistant.model.entity.Student;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -20,4 +24,8 @@ public interface StudentService {
     void deleteStudent(Integer id);
 
     void editStudent(StudentDto student);
+
+    List<StudentDto> findAllStudents(Page<Student> students);
+
+    Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification);
 }

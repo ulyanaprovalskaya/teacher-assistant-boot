@@ -39,7 +39,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public List<DisciplineDto> getAll() {
-        return ((List<Discipline>)disciplineRepository.findAll())
+        return ((List<Discipline>) disciplineRepository.findAll())
                 .stream()
                 .map(d -> modelMapper.map(d, DisciplineDto.class))
                 .collect(Collectors.toList());
@@ -48,5 +48,10 @@ public class DisciplineServiceImpl implements DisciplineService {
     @Override
     public DisciplineDto getById(Integer id) {
         return modelMapper.map(disciplineRepository.findById(id), DisciplineDto.class);
+    }
+
+    @Override
+    public DisciplineDto getDisciplineByLessonId(Integer lessonId) {
+        return modelMapper.map(disciplineRepository.getDisciplineByLessonId(lessonId), DisciplineDto.class);
     }
 }

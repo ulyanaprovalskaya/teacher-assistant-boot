@@ -16,4 +16,6 @@ public interface DisciplineService {
 
     DisciplineDto getById(Integer id);
 
+    DisciplineDto getDisciplineByLessonId(Integer lessonId);
+
 }
