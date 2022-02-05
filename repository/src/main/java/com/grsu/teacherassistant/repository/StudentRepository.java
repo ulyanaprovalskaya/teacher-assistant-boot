@@ -2,6 +2,9 @@ package com.grsu.teacherassistant.repository;
 
 import com.grsu.teacherassistant.model.entity.LessonType;
 import com.grsu.teacherassistant.model.entity.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -16,16 +19,16 @@ public interface StudentRepository extends JpaRepository<Student, Integer>, JpaS
     @Query("SELECT st FROM Student st JOIN StudentGroup sg WHERE sg.active = ?1")
     List<Student> findStudentByGroupActivity(boolean activity);
 
-/*    SELECT st FROM STUDENT st JOIN STUDENT_LESSON sl ON st.id = sl.student_id
-      JOIN LESSON l ON l.id = sl.lesson_id
-      WHERE l.id = :lessonId
-      AND ((l.group_id NOT NULL AND st.id NOT IN (
-          SELECT stg.student_id FROM STUDENT_GROUP stg WHERE stg.group_id = l.group_id))
-      OR st.id NOT IN (
-          SELECT stg.student_id FROM STUDENT_GROUP stg JOIN STREAM_GROUP sg ON sg.group_id = stg.group_id
-          WHERE sg.stream_id = l.stream_id))*/
+    /*    SELECT st FROM STUDENT st JOIN STUDENT_LESSON sl ON st.id = sl.student_id
+          JOIN LESSON l ON l.id = sl.lesson_id
+          WHERE l.id = :lessonId
+          AND ((l.group_id NOT NULL AND st.id NOT IN (
+              SELECT stg.student_id FROM STUDENT_GROUP stg WHERE stg.group_id = l.group_id))
+          OR st.id NOT IN (
+              SELECT stg.student_id FROM STUDENT_GROUP stg JOIN STREAM_GROUP sg ON sg.group_id = stg.group_id
+              WHERE sg.stream_id = l.stream_id))*/
     @Query("SELECT st FROM Student st JOIN StudentLesson stl JOIN Lesson l WHERE l.id = ?1 AND st.groups NOT IN (" +
-        "SELECT g FROM StudentGroup g JOIN Stream s JOIN Lesson l WHERE l.id = ?1)")
+            "SELECT g FROM StudentGroup g JOIN Stream s JOIN Lesson l WHERE l.id = ?1)")
     List<Student> findAdditionalStudents(Integer lessonId);
 
     /*select count(*) from STUDENT_LESSON sl join STUDENT s on sl.student_id = s.id
@@ -33,7 +36,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer>, JpaS
          where sl.student_id = :studentId and sl.registered = 1
          and l.group_id <> sg.group_id*/
     @Query("SELECT COUNT(s) FROM StudentLesson stl JOIN Student s JOIN StudentGroup JOIN Lesson " +
-        "WHERE s.id = ?1 AND stl.registered = true")
+            "WHERE s.id = ?1 AND stl.registered = true")
     Integer getAdditionalStudentLessonsAmount(Integer studentId);
 
 
@@ -50,11 +53,21 @@ public interface StudentRepository extends JpaRepository<Student, Integer>, JpaS
                 and time(sch.begin) <= time('now', 'localtime')) or l.id = :lessonId)\n")*/
     //
     @Query("SELECT st FROM Student st JOIN StudentLesson sl JOIN Lesson l JOIN Schedule sch JOIN Stream JOIN Discipline d " +
-        "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2")
+            "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2")
     Integer getStudentTotalSkipsAmount(Integer studentId, Integer disciplineId);
 
     @Query("SELECT st FROM Student st JOIN StudentLesson sl JOIN Lesson l JOIN Schedule sch JOIN Stream JOIN Discipline d " +
             "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2 AND l.type = ?3")
     Integer getStudentSkipsAmountByLessonType(Integer studentId, Integer disciplineId, LessonType lessonType);
+
+   /* @Query(value = "select distinct s from Student s left join s.groups g " +
+            " WHERE (g.active = true and (g.expirationDate > current_timestamp or g.expirationDate is null) or size (s.groups) = 0 ) ",
+    countQuery = "select distinct count(s) from Student s left join s.groups g " +
+            " WHERE (g.active = true and (g.expirationDate > current_timestamp or g.expirationDate is null) or size (s.groups) = 0 ) ")
+    Page<Student> getArchivedStudents(Specification<Student> specification, Pageable pageable);*/
+
+    @Query(value = "select distinct s from Student s left join s.groups g " +
+            " WHERE (g.active = false or (g.expirationDate < current_timestamp or g.expirationDate is not null)) ")
+    Page<Student> getArchivedStudents(Specification<Student> specification, Pageable pageable);
 
 }

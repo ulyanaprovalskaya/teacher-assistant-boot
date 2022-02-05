@@ -10,7 +10,9 @@ import com.grsu.teacherassistant.service.api.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +61,12 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification) {
-        return studentRepository.findAll(studentSpecification,pageable);
+    public Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification, String sortDirection, String sortField, boolean isArchived) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.fromString(sortDirection), sortField);
+        if (isArchived) {
+            return studentRepository.getArchivedStudents(studentSpecification, pageRequest);
+        }
+        return studentRepository.findAll(studentSpecification, pageRequest);
     }
 
     @Override

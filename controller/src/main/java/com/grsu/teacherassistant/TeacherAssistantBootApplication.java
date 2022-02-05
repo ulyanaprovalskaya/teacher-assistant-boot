@@ -14,6 +14,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 public class TeacherAssistantBootApplication {
 
     public static void main(String[] args) {
+        // TODO: добавить шедулер и джобу для изменения статуса группы
         SpringApplication.run(TeacherAssistantBootApplication.class, args);
     }
 }
