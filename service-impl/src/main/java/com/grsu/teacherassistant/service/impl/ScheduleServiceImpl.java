@@ -1,7 +1,6 @@
 package com.grsu.teacherassistant.service.impl;
 
-import com.grsu.teacherassistant.dto.ScheduleDto;
-import com.grsu.teacherassistant.model.entity.Schedule;
+import com.grsu.teacherassistant.dto.lesson.ScheduleDto;
 import com.grsu.teacherassistant.repository.ScheduleRepository;
 import com.grsu.teacherassistant.service.api.ScheduleService;
 import lombok.RequiredArgsConstructor;

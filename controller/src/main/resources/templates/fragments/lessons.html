@@ -1,31 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Lessons</title>
+  <meta charset="UTF-8">
+  <title>Lessons</title>
 </head>
 <body>
-<table th:fragment="lessons" class="table table-stripped table-bordered margin10">
-    <thead class="thead-light">
-    <tr>
-        <th th:text="#{lessons.stream}"></th>
-        <th th:text="#{lessons.discipline}"></th>
-        <th th:text="#{lessons.date}"></th>
-        <th th:text="#{lessons.time}"></th>
-        <th th:text="#{lessons.type}"></th>
-        <th th:text="#{lessons.group}"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="lesson : ${lessons}">
-        <td th:text="${lesson.stream.name}"></td>
-        <td th:text="${lesson.stream.discipline.name}"></td>
-        <td th:text="${lesson.date}"></td>
-        <td th:text="1"></td>
-        <td th:text="${lesson.type}"></td>
-        <td th:text="${lesson.group}"></td>
-    </tr>
-    </tbody>
+<table th:fragment="lessons" class="table table-stripped table-bordered table-hover margin10">
+  <thead class="thead-light">
+  <tr>
+    <th th:text="#{lessons.stream}"></th>
+    <th th:text="#{lessons.discipline}"></th>
+    <th th:text="#{lessons.date}"></th>
+    <th th:text="#{lessons.type}"></th>
+    <th th:text="#{lessons.group}"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="lesson : ${lessons}" th:onclick="'javascript:openRegistration(\'' + ${lesson.id} + '\');'">
+    <td th:text="${lesson.stream.name}"></td>
+    <td th:text="${lesson.discipline.name}"></td>
+    <td th:text="${#temporals.format(lesson.date, 'dd.MM.yyyy HH:mm')}"></td>
+    <td th:text="${lesson.type.name}"></td>
+    <td th:if="${lesson.group != null}" th:text="${lesson.group.name}"></td>
+    <td th:if="${lesson.group == null}" th:text="${lesson.stream.name}"></td>
+  </tr>
+  </tbody>
 </table>
 </body>
 </html>

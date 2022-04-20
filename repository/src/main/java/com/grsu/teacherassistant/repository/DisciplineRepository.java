@@ -1,14 +1,12 @@
 package com.grsu.teacherassistant.repository;
 
-import com.grsu.teacherassistant.model.entity.Discipline;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.grsu.teacherassistant.entity.Discipline;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
 
-public interface DisciplineRepository extends JpaRepository<Discipline, Integer> {
-    @Query(value = "select  d.* from Lesson l " +
-            "join Stream str on l.stream_id = str.id " +
-            "join Discipline d on str.discipline_id = d.id " +
-            "where l.id = :lessonId", nativeQuery = true)
-    Discipline getDisciplineByLessonId(Integer lessonId);
+public interface DisciplineRepository extends CrudRepository<Discipline, Integer> {
+
+    @Query("SELECT d FROM Discipline d JOIN d.streams s JOIN s.lessons l WHERE l.id = ?1")
+    Optional<Discipline> findByLessonId(Integer id);
 }

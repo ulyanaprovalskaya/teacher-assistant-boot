@@ -1,13 +1,14 @@
 package com.grsu.teacherassistant.service.impl;
 
-import com.grsu.teacherassistant.dto.StudentDto;
+import com.grsu.teacherassistant.dto.student.StudentDto;
 import com.grsu.teacherassistant.dto.StudentGroupDto;
-import com.grsu.teacherassistant.model.entity.Student;
-import com.grsu.teacherassistant.model.entity.StudentGroup;
+import com.grsu.teacherassistant.entity.Student;
+import com.grsu.teacherassistant.entity.StudentGroup;
+import com.grsu.teacherassistant.mapper.StudentGroupMapper;
+import com.grsu.teacherassistant.mapper.StudentMapper;
 import com.grsu.teacherassistant.repository.GroupRepository;
 import com.grsu.teacherassistant.service.api.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,12 +21,12 @@ import java.util.stream.Collectors;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
-    private final ModelMapper modelMapper;
+    private final StudentGroupMapper studentGroupMapper;
+    private final StudentMapper studentMapper;
 
     @Override
     public void createGroup(StudentGroupDto group) {
-        StudentGroup studentGroup = modelMapper.map(group, StudentGroup.class);
-        groupRepository.save(studentGroup);
+        groupRepository.save(studentGroupMapper.toEntity(group));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class GroupServiceImpl implements GroupService {
     public List<StudentGroupDto> getAll() {
         return ((List<StudentGroup>) groupRepository.findAll())
                 .stream()
-                .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
+                .map(studentGroupMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +52,7 @@ public class GroupServiceImpl implements GroupService {
     public List<StudentGroupDto> getActive() {
         return groupRepository.findAllByActive(true)
                 .stream()
-                .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
+                .map(studentGroupMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
     public List<StudentGroupDto> getGroupsByStreamId(Integer id) {
         return groupRepository.findAllByStreamId(id)
                 .stream()
-                .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
+                .map(studentGroupMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -74,8 +75,8 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public void addStudentToGroup(StudentDto studentDto, StudentGroupDto groupDto) {
-        Student student = modelMapper.map(studentDto, Student.class);
-        StudentGroup group  = modelMapper.map(groupDto, StudentGroup.class);
+        Student student = studentMapper.toEntity(studentDto);
+        StudentGroup group  = studentGroupMapper.toEntity(groupDto);
         group.getStudents().add(student);
     }
 }

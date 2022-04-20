@@ -1,0 +1,103 @@
+div {
+    font-family: Arial, sans-serif;
+}
+.registration-container {
+    margin: 15px;
+
+    display: grid;
+    grid-template-areas: "student lesson"
+                         "table   details";
+    grid-template-rows: 250px 1fr;
+    grid-template-columns: 1fr 0.6fr;
+}
+
+#studentInfo {
+    grid-area: student;
+}
+
+#lessonInfo {
+    grid-area: lesson;
+}
+
+#studentsTable {
+    grid-area: table;
+}
+#lessonDetails {
+    grid-area: details;
+}
+
+#studentImage {
+    float: left;
+    border-style: solid;
+    border-width: thin;
+    margin-right: 15px;
+}
+
+#studentName {
+    font-size: 30pt;
+}
+
+#studentGroup {
+    font-size: 25pt;
+}
+
+#studentSkips, #noSkips {
+    font-size: 30pt;
+    color: red;
+}
+
+#lessonInfo {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+}
+
+#students {
+    grid-column: 1;
+    margin-right: 20px;
+}
+
+#studentsTotal, #studentsPresent {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #575757;
+}
+
+#studentsAbsent {
+    font-size: 22pt;
+    font-weight: bold;
+    color: blue;
+}
+
+#lesson {
+    grid-column: 2;
+}
+
+#stream, #lessonNumber, #lessonDate, #lessonPeriod {
+    font-size: 22pt;
+    color: #575757;
+}
+
+#presentDataTable tbody td, #absentDataTable tbody td {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+}
+#presentDataTable thead tr, #absentDataTable thead tr {
+    line-height: 10px;
+}
+#presentDataTable tbody tr button, #absentDataTable tbody tr button {
+    height: 25px;
+}
+#timerAndClock {
+    width: 100%;
+    height: 70px;
+    background-color: blue;
+}
+#timer, #clock {
+    font-size: xx-large;
+}
+#details {
+    margin-top: 10px;
+}
+.tippy-content {
+    white-space: pre-line;
+}

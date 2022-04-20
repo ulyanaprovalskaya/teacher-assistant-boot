@@ -1,6 +1,6 @@
 package com.grsu.teacherassistant.repository;
 
-import com.grsu.teacherassistant.model.entity.Lesson;
+import com.grsu.teacherassistant.entity.Lesson;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,7 +16,7 @@ public interface LessonRepository extends CrudRepository<Lesson, Integer> {
       join LESSON_TYPE lt on l.type_id = lt.id where sl.student_id =:studentId
          and sl.registered = 1 and l.group_id <> sg.group_id*/
     @Query("SELECT l FROM Lesson l JOIN StudentLesson stl JOIN Student s JOIN StudentGroup sg " +
-        "WHERE stl.student.id = ?1 AND stl.registered = true AND  l.group.id <> sg.id")
+        "WHERE stl.student.id = ?1 AND stl.registered = 1 AND  l.group.id <> sg.id")
     List<AdditionalLesson> getStudentAdditionalLessons(Integer studentId);
 
     List<Lesson> getLessonByDateBetween(LocalDateTime from, LocalDateTime to);

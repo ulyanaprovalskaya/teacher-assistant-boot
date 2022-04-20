@@ -1,7 +1,7 @@
 package com.grsu.teacherassistant.controller;
 
 import com.grsu.teacherassistant.dto.DisciplineDto;
-import com.grsu.teacherassistant.dto.LessonDto;
+import com.grsu.teacherassistant.dto.lesson.LessonDto;
 import com.grsu.teacherassistant.dto.ScheduleFilterDto;
 import com.grsu.teacherassistant.service.api.DisciplineService;
 import com.grsu.teacherassistant.service.api.GroupService;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;

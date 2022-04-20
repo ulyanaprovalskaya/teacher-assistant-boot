@@ -1,6 +1,6 @@
 package com.grsu.teacherassistant.service.api;
 
-import com.grsu.teacherassistant.dto.ScheduleDto;
+import com.grsu.teacherassistant.dto.lesson.ScheduleDto;
 
 import java.util.List;
 

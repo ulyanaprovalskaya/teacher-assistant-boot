@@ -1,14 +1,23 @@
 package com.grsu.teacherassistant.service.impl;
 
-import com.grsu.teacherassistant.dto.StudentDto;
-import com.grsu.teacherassistant.model.entity.LessonType;
-import com.grsu.teacherassistant.model.entity.Student;
+import com.grsu.teacherassistant.dto.lesson.StudentLessonDto;
+import com.grsu.teacherassistant.dto.student.StudentDto;
+import com.grsu.teacherassistant.dto.student.StudentWithAttendanceDto;
+import com.grsu.teacherassistant.entity.LessonType;
+import com.grsu.teacherassistant.entity.Student;
+import com.grsu.teacherassistant.exception.EntityNotFoundException;
+import com.grsu.teacherassistant.mapper.StudentLessonMapper;
+import com.grsu.teacherassistant.mapper.StudentMapper;
 import com.grsu.teacherassistant.repository.LessonRepository;
+import com.grsu.teacherassistant.repository.StudentLessonRepository;
 import com.grsu.teacherassistant.repository.StudentRepository;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
+import com.grsu.teacherassistant.service.api.DisciplineService;
+import com.grsu.teacherassistant.service.api.ImageService;
 import com.grsu.teacherassistant.service.api.StudentService;
 import com.grsu.teacherassistant.service.filter.StudentFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,8 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,7 +38,14 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final LessonRepository lessonRepository;
     private final StudentFilter studentFilter;
+    private final StudentLessonRepository studentLessonRepository;
+    private final DisciplineService disciplineService;
+    private final ImageService imageService;
+    private final StudentMapper studentMapper;
+    private final StudentLessonMapper studentLessonMapper;
     private final ModelMapper modelMapper;
+
+    private static final DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @Override
     public List<AdditionalLesson> getStudentAdditionalLessons(Integer studentId, Integer disciplineId) {
@@ -66,6 +82,125 @@ public class StudentServiceImpl implements StudentService {
         return modelMapper.map(studentRepository.getById(id), StudentDto.class);
     }
 
+    }
+
+    @Override
+    public List<StudentDto> getPresentStudents(Integer lessonId) {
+        List<StudentDto> presentStudents = studentRepository.findByPresenceAndLessonId(1, lessonId)
+                                                            .stream()
+                                                            .map(studentMapper::toDto)
+                                                            .collect(Collectors.toList());
+        log.info("Found present students, lessonId = {}, students amount = {}", lessonId, presentStudents.size());
+        return presentStudents;
+    }
+
+    @Override
+    public List<StudentDto> getAbsentStudents(Integer lessonId) {
+        List<StudentDto> absentStudents = studentRepository.findByPresenceAndLessonId(0, lessonId)
+                                                           .stream()
+                                                           .map(studentMapper::toDto)
+                                                           .collect(Collectors.toList());
+        log.info("Found absent students, lessonId = {}, students amount = {}", lessonId, absentStudents.size());
+        return absentStudents;
+    }
+
+    @Override
+    @Transactional
+    public StudentWithAttendanceDto getStudentAttendance(Integer studentId, Integer lessonId) {
+        Integer disciplineId = disciplineService.getByLessonId(lessonId).getId();
+        Student student = studentRepository.findByIdWithGroup(studentId, disciplineId)
+                                           .orElseThrow(() -> new EntityNotFoundException(String.format(
+                                                   "Student with id=%d not found",
+                                                   studentId)));
+
+        List<StudentLessonDto> studentTotalSkips = studentLessonRepository
+                .findByRegisteredAndStudentIdAndLessonStreamDisciplineId(0, studentId, disciplineId)
+                .stream()
+                .map(studentLessonMapper::toDto)
+                .collect(Collectors.toList());
+
+        List<StudentLessonDto> studentLectureSkips =
+                getStudentSkipsByLessonType(studentId, disciplineId, LessonType.LessonTypeEnum.LECTURE);
+        List<StudentLessonDto> studentPracticalSkips =
+                getStudentSkipsByLessonType(studentId, disciplineId, LessonType.LessonTypeEnum.PRACTICAL);
+        String studentImagePath = imageService.getStudentImagePath(studentRepository.findById(studentId)
+                                                                                    .orElseThrow(() -> new EntityNotFoundException(
+                                                                                            String.format(
+                                                                                                    "Student with id=%d not found",
+                                                                                                    studentId)))
+                                                                                    .getCardUid());
+
+
+        log.info("Found student (id={}) total skips by discipline (id={}): {}",
+                 studentId,
+                 disciplineId,
+                 studentTotalSkips);
+        log.info("Found student (id={}) lecture skips by discipline (id={}): {}",
+                 studentId,
+                 disciplineId,
+                 studentLectureSkips);
+        log.info("Found student (id={}) practical skips by discipline (id={}): {}",
+                 studentId,
+                 disciplineId,
+                 studentPracticalSkips);
+
+        return studentMapper.toFullDto(student)
+                            .setDisciplineId(disciplineId)
+                            .setTotalSkips(studentTotalSkips)
+                            .setLectureSkips(studentLectureSkips)
+                            .setPracticalSkips(studentPracticalSkips)
+                            .setImagePath(studentImagePath);
+    }
+
+    @Override
+    public String getTotalSkipsInfo(List<StudentLessonDto> skips) {
+        StringBuilder sb = new StringBuilder();
+        for (StudentLessonDto skip : skips) {
+            sb.append(skip.getDate().format(formatters))
+              .append("  ")
+              .append(skip.getType().getName())
+              .append("\n");
+        }
+        String skipsInfo = sb.toString();
+        log.info("Found skips info: {}", skipsInfo);
+        return skipsInfo;
+    }
+
+    @Override
+    public String getPracticalSkipsInfo(List<StudentLessonDto> skips) {
+        String skipsInfo  = getSkipsInfoByLessonType(skips, "Практическое занятие");
+        log.info("Found practical skips info: {}", skipsInfo);
+        return skipsInfo;
+    }
+
+    @Override
+    public String getLectureSkipsInfo(List<StudentLessonDto> skips) {
+        String skipsInfo  = getSkipsInfoByLessonType(skips, "Лекция");
+        log.info("Found lecture skips info: {}", skipsInfo);
+        return skipsInfo;
+    }
+
+    private String getSkipsInfoByLessonType(List<StudentLessonDto> skips, String lessonTypeName) {
+        StringBuilder sb = new StringBuilder();
+        for (StudentLessonDto skip : skips) {
+            if(skip.getType().getName().equals(lessonTypeName)){
+                sb.append(skip.getDate().format(formatters)).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private List<StudentLessonDto> getStudentSkipsByLessonType(Integer studentId,
+                                                               Integer disciplineId,
+                                                               LessonType.LessonTypeEnum lessonType) {
+        return studentLessonRepository
+                .findByRegisteredAndStudentIdAndLessonStreamDisciplineIdAndLessonTypeType(0,
+                                                                                          studentId,
+                                                                                          disciplineId,
+                                                                                          lessonType)
+                .stream()
+                .map(studentLessonMapper::toDto)
+                .collect(Collectors.toList());
     @Override
     public List<StudentDto> getAllByIdInList(List<Integer> studentIds) {
         return studentRepository.findAllByIdIn(studentIds)

@@ -1,10 +1,13 @@
 package com.grsu.teacherassistant.service.impl;
 
 import com.grsu.teacherassistant.dto.DisciplineDto;
-import com.grsu.teacherassistant.model.entity.Discipline;
+import com.grsu.teacherassistant.entity.Discipline;
+import com.grsu.teacherassistant.exception.EntityNotFoundException;
+import com.grsu.teacherassistant.mapper.DisciplineMapper;
 import com.grsu.teacherassistant.repository.DisciplineRepository;
 import com.grsu.teacherassistant.service.api.DisciplineService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,23 +15,24 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DisciplineServiceImpl implements DisciplineService {
 
     private final DisciplineRepository disciplineRepository;
-    private final ModelMapper modelMapper;
+    private final DisciplineMapper disciplineMapper;
 
     @Override
     public void createDiscipline(DisciplineDto disciplineDto) {
         disciplineDto.setCreateDate(LocalDateTime.now());
         disciplineDto.setActive(true);
-        disciplineRepository.save(modelMapper.map(disciplineDto, Discipline.class));
+        disciplineRepository.save(disciplineMapper.toEntity(disciplineDto));
     }
 
     @Override
     public void updateDiscipline(DisciplineDto disciplineDto) {
-        disciplineRepository.save(modelMapper.map(disciplineDto, Discipline.class));
+        disciplineRepository.save(disciplineMapper.toEntity(disciplineDto));
     }
 
     @Override
@@ -36,22 +40,27 @@ public class DisciplineServiceImpl implements DisciplineService {
         disciplineRepository.deleteById(id);
     }
 
-
     @Override
     public List<DisciplineDto> getAll() {
         return ((List<Discipline>) disciplineRepository.findAll())
                 .stream()
-                .map(d -> modelMapper.map(d, DisciplineDto.class))
+                .map(disciplineMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public DisciplineDto getById(Integer id) {
-        return modelMapper.map(disciplineRepository.getById(id), DisciplineDto.class);
+        return disciplineMapper.toDto(disciplineRepository.findById(id)
+                                                          .orElseThrow(() -> new EntityNotFoundException(String.format(
+                                                                  "Discipline with id=%d not found", id))));
     }
 
     @Override
-    public DisciplineDto getDisciplineByLessonId(Integer lessonId) {
-        return modelMapper.map(disciplineRepository.getDisciplineByLessonId(lessonId), DisciplineDto.class);
+    public DisciplineDto getByLessonId(Integer lessonId) {
+        DisciplineDto disciplineDto = disciplineMapper.toDto(disciplineRepository.findByLessonId(lessonId)
+                                                          .orElseThrow(() -> new EntityNotFoundException(String.format(
+                                                                  "Discipline wasn't found by lessonId=%d ", lessonId))));
+        log.info("Discipline {} was found by lessonId={}", disciplineDto, lessonId);
+        return disciplineDto;
     }
 }
