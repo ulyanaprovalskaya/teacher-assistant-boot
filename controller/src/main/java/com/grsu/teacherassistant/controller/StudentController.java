@@ -43,27 +43,14 @@ public class StudentController {
                                @PageableDefault Pageable pageable,
                                @RequestParam(value = "isArchived", defaultValue = "false") boolean isArchived,
                                @RequestParam(value = "sortDirection", defaultValue = "DESC") String sortDirection,
-                               @RequestParam(value = "sortField", defaultValue = "lastName") String sortField) {
+                               @RequestParam(value = "sortField", defaultValue = "lastName") String sortField,
+                               @RequestParam(value = "search", required = false) String search) {
         Page<Student> allStudents = studentService
-                .getAllStudents(pageable, sortDirection, sortField, isArchived);
+                .getAllStudents(pageable, sortDirection, sortField, isArchived, search);
         filtersDto.setFilters(Arrays.asList(new FilterDto(), new FilterDto(), new FilterDto()));
-        pageRequestService.buildDefaultPageModel(model, sortDirection, sortField, allStudents, filtersDto)
+        pageRequestService.buildDefaultPageModel(model, sortDirection, sortField, allStudents)
                 .addAttribute("students", studentMapper.toStudents(allStudents))
-                .addAttribute("isArchived", isArchived);
-        return "students";
-    }
-
-    @PostMapping("/filter")
-    public String filterStudents(Model model,
-                               @ModelAttribute FiltersDto filtersDto,
-                               @PageableDefault Pageable pageable,
-                               @RequestParam(required = false, value = "isArchived", defaultValue = "false") boolean isArchived,
-                               @RequestParam(required = false, value = "sortDirection", defaultValue = "DESC") String sortDirection,
-                               @RequestParam(required = false, value = "sortField", defaultValue = "lastName") String sortField) {
-        Page<Student> allStudents = studentService
-                .getAllStudents(pageable, !CollectionUtils.isEmpty(filtersDto.getFilters()) ? new FilterSpecification<>(filtersDto.getFilters()) : null, sortDirection, sortField, isArchived);
-        pageRequestService.buildDefaultPageModel(model, sortDirection, sortField, allStudents, filtersDto)
-                .addAttribute("students", studentMapper.toStudents(allStudents))
+                .addAttribute("search", search)
                 .addAttribute("isArchived", isArchived);
         return "students";
     }

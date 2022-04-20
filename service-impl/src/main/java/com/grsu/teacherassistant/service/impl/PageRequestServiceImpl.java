@@ -1,6 +1,5 @@
 package com.grsu.teacherassistant.service.impl;
 
-import com.grsu.teacherassistant.dto.FiltersDto;
 import com.grsu.teacherassistant.service.api.PageRequestService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -14,9 +13,9 @@ public class PageRequestServiceImpl<T> implements PageRequestService<T> {
         return model;
     }
 
-    public Model buildDefaultPageModel(Model model, String sortDirection, String sortField, Page<T> page, FiltersDto filtersDto) {
+    public Model buildDefaultPageModel(Model model, String sortDirection, String sortField, Page<T> page, String search) {
         fillDefaultPageModel(model, sortDirection, sortField, page);
-        model.addAttribute("filtersDto", filtersDto);
+        model.addAttribute("search", search);
         return model;
     }
 

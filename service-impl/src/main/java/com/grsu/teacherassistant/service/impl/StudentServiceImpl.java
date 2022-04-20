@@ -7,6 +7,7 @@ import com.grsu.teacherassistant.repository.LessonRepository;
 import com.grsu.teacherassistant.repository.StudentRepository;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
 import com.grsu.teacherassistant.service.api.StudentService;
+import com.grsu.teacherassistant.service.filter.StudentFilter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final LessonRepository lessonRepository;
+    private final StudentFilter studentFilter;
     private final ModelMapper modelMapper;
 
     @Override
@@ -82,12 +84,12 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived) {
+    public Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived, String search) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.fromString(sortDirection), sortField);
         if (isArchived) {
-            return studentRepository.getArchivedStudents(pageRequest);
+            return studentRepository.getArchivedStudents(studentFilter.getFilter(search), pageRequest);
         }
-        return studentRepository.findAll(pageRequest);
+        return studentRepository.findAll(studentFilter.getFilter(search), pageRequest);
     }
 
     @Override

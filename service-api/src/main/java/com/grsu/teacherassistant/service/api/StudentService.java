@@ -31,7 +31,7 @@ public interface StudentService {
 
     List<StudentDto> getAll();
 
-    Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived);
+    Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived, String search);
 
     Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification, String sortDirection, String sortField, boolean isArchived);
 }

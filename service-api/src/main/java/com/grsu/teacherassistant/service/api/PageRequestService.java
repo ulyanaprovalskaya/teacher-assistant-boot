@@ -10,6 +10,6 @@ public interface PageRequestService<T> {
 
     Model buildDefaultPageModel(Model model, String sortDirection, String sortField, Page<T> page);
 
-    Model buildDefaultPageModel(Model model, String sortDirection, String sortField, Page<T> page, FiltersDto filtersDto);
+//    Model buildDefaultPageModel(Model model, String sortDirection, String sortField, Page<T> page, FiltersDto filtersDto);
 
 }

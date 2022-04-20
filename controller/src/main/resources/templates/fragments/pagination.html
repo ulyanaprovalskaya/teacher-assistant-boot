@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:fragment="pagination" th:if="${totalPages > 1}"
-     th:with="pageUrlPostfix = '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection} + '&isArchived=' + ${isArchived}">
+     th:with="pageUrlPostfix = '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection} + '&isArchived=' + ${isArchived} + '&search=' + ${search}">
     <nav>
         <ul class="pagination justify-content-center flex-wrap"
             th:with="pageUrlPrefix = '/students?page='">
