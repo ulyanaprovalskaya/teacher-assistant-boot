@@ -1,5 +1,6 @@
 package com.grsu.teacherassistant.dto;
 
+import com.grsu.teacherassistant.dto.student.StudentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

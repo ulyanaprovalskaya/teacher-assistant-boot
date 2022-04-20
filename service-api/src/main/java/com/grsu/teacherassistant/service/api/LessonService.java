@@ -1,6 +1,7 @@
 package com.grsu.teacherassistant.service.api;
 
-import com.grsu.teacherassistant.dto.LessonDto;
+import com.grsu.teacherassistant.dto.lesson.LessonDto;
+import com.grsu.teacherassistant.dto.lesson.LessonWithSchedule;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,6 +12,7 @@ public interface LessonService {
 
     void deleteLesson(Integer lessonId);
 
-    List<LessonDto> getAllByDateBetween(LocalDate dateFrom, LocalDate dateTo);
+    LessonWithSchedule getById(Integer lessonId);
 
+    List<LessonDto> getAllByDateBetween(LocalDate dateFrom, LocalDate dateTo);
 }

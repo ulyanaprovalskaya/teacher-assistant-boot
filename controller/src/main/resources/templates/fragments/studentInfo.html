@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Student info</title>
+</head>
+<body>
+<div th:fragment="studentInfo">
+  <div id="studentImage">
+    <img th:src="@{${selectedStudent.imagePath}}" width="200px" height="250px">
+  </div>
+  <div id="studentName" th:text="|${selectedStudent.firstName} ${selectedStudent.lastName}|"></div>
+  <div id="studentGroup" th:text="${selectedStudent.groups[0].name}"></div>
+  <div id="studentSkips">
+    <span th:if="${#lists.size(selectedStudent.totalSkips) > 0}">
+      <span th:text="|#{label.skips}: |"></span>
+      <span id="totalSkips" th:text="|${#lists.size(selectedStudent.totalSkips)} |"></span>
+      <span id="lectureSkips" th:text="|(${#lists.size(selectedStudent.lectureSkips)} /|"></span>
+      <span id="practicalSkips" th:text="|${#lists.size(selectedStudent.practicalSkips)})|"></span>
+    </span>
+
+    <span id="noSkips" th:if="${#lists.size(selectedStudent.totalSkips) == 0}" th:text="#{lesson.visit.noSkip}"></span>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+<script th:inline="javascript">
+  $(document).ready(function () {
+    let totalSkipsText = [[${totalSkips}]];
+    let lectureSkipsText = /*[[${lectureSkips}]]*/'';
+    let practicalSkipsText = /*[[${practicalSkips}]]*/'';
+
+    tippy('#totalSkips', {
+      content: totalSkipsText,
+      placement: 'bottom',
+      interactive: true
+    });
+
+    if (lectureSkipsText != '') {
+      tippy('#lectureSkips', {
+        content: lectureSkipsText,
+        placement: 'bottom',
+        interactive: true
+      });
+    }
+
+    if (practicalSkipsText != '') {
+      tippy('#practicalSkips', {
+        content: practicalSkipsText,
+        placement: 'bottom',
+        interactive: true
+      });
+    }
+  });
+</script>
+</body>
+</html>

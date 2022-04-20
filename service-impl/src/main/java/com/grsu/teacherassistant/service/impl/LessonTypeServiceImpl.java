@@ -1,7 +1,6 @@
 package com.grsu.teacherassistant.service.impl;
 
-import com.grsu.teacherassistant.dto.LessonTypeDto;
-import com.grsu.teacherassistant.model.entity.LessonType;
+import com.grsu.teacherassistant.dto.lesson.LessonTypeDto;
 import com.grsu.teacherassistant.repository.LessonTypeRepository;
 import com.grsu.teacherassistant.service.api.LessonTypeService;
 import lombok.RequiredArgsConstructor;

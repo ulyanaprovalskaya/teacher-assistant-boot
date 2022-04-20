@@ -1,6 +1,6 @@
 package com.grsu.teacherassistant.repository;
 
-import com.grsu.teacherassistant.model.entity.StudentGroup;
+import com.grsu.teacherassistant.entity.StudentGroup;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

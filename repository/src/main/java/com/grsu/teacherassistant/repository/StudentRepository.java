@@ -1,11 +1,11 @@
 package com.grsu.teacherassistant.repository;
 
-import com.grsu.teacherassistant.model.entity.LessonType;
-import com.grsu.teacherassistant.model.entity.Student;
+import com.grsu.teacherassistant.entity.LessonType;
+import com.grsu.teacherassistant.entity.Student;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 
@@ -14,16 +14,16 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
     @Query("SELECT st FROM Student st JOIN StudentGroup sg WHERE sg.active = ?1")
     List<Student> findStudentByGroupActivity(boolean activity);
 
-/*    SELECT st FROM STUDENT st JOIN STUDENT_LESSON sl ON st.id = sl.student_id
-      JOIN LESSON l ON l.id = sl.lesson_id
-      WHERE l.id = :lessonId
-      AND ((l.group_id NOT NULL AND st.id NOT IN (
-          SELECT stg.student_id FROM STUDENT_GROUP stg WHERE stg.group_id = l.group_id))
-      OR st.id NOT IN (
-          SELECT stg.student_id FROM STUDENT_GROUP stg JOIN STREAM_GROUP sg ON sg.group_id = stg.group_id
-          WHERE sg.stream_id = l.stream_id))*/
+    /*    SELECT st FROM STUDENT st JOIN STUDENT_LESSON sl ON st.id = sl.student_id
+          JOIN LESSON l ON l.id = sl.lesson_id
+          WHERE l.id = :lessonId
+          AND ((l.group_id NOT NULL AND st.id NOT IN (
+              SELECT stg.student_id FROM STUDENT_GROUP stg WHERE stg.group_id = l.group_id))
+          OR st.id NOT IN (
+              SELECT stg.student_id FROM STUDENT_GROUP stg JOIN STREAM_GROUP sg ON sg.group_id = stg.group_id
+              WHERE sg.stream_id = l.stream_id))*/
     @Query("SELECT st FROM Student st JOIN StudentLesson stl JOIN Lesson l WHERE l.id = ?1 AND st.groups NOT IN (" +
-        "SELECT g FROM StudentGroup g JOIN Stream s JOIN Lesson l WHERE l.id = ?1)")
+                   "SELECT g FROM StudentGroup g JOIN Stream s JOIN Lesson l WHERE l.id = ?1)")
     List<Student> findAdditionalStudents(Integer lessonId);
 
     /*select count(*) from STUDENT_LESSON sl join STUDENT s on sl.student_id = s.id
@@ -31,9 +31,8 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
          where sl.student_id = :studentId and sl.registered = 1
          and l.group_id <> sg.group_id*/
     @Query("SELECT COUNT(s) FROM StudentLesson stl JOIN Student s JOIN StudentGroup JOIN Lesson " +
-        "WHERE s.id = ?1 AND stl.registered = true")
+                   "WHERE s.id = ?1 AND stl.registered = 1")
     Integer getAdditionalStudentLessonsAmount(Integer studentId);
-
 
     /*select l.date, l.type_id from STUDENT st
             join STUDENT_LESSON sl on sl.student_id = st.id
@@ -48,11 +47,17 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
                 and time(sch.begin) <= time('now', 'localtime')) or l.id = :lessonId)\n")*/
     //
     @Query("SELECT st FROM Student st JOIN StudentLesson sl JOIN Lesson l JOIN Schedule sch JOIN Stream JOIN Discipline d " +
-        "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2")
+                   "WHERE st.id = ?1 AND sl.registered = 0 AND d.id = ?2")
     Integer getStudentTotalSkipsAmount(Integer studentId, Integer disciplineId);
 
     @Query("SELECT st FROM Student st JOIN StudentLesson sl JOIN Lesson l JOIN Schedule sch JOIN Stream JOIN Discipline d " +
-            "WHERE st.id = ?1 AND sl.registered = false AND d.id = ?2 AND l.type = ?3")
+                   "WHERE st.id = ?1 AND sl.registered = 0 AND d.id = ?2 AND l.type = ?3")
     Integer getStudentSkipsAmountByLessonType(Integer studentId, Integer disciplineId, LessonType lessonType);
 
+    @Query("SELECT st FROM Student st JOIN StudentLesson sl ON st.id = sl.studentId WHERE sl.registered = ?1 AND sl.lessonId = ?2")
+    List<Student> findByPresenceAndLessonId(Integer registered, Integer lessonId);
+
+    @Query("SELECT st FROM Student st JOIN FETCH st.groups g WHERE st.id = ?1 AND g IN " +
+                   "(SELECT sg FROM StudentGroup sg JOIN sg.streams s WHERE s.discipline.id = ?2)")
+    Optional<Student> findByIdWithGroup(Integer studentId, Integer disciplineId);
 }

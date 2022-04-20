@@ -2,8 +2,8 @@ package com.grsu.teacherassistant.service.impl;
 
 import com.grsu.teacherassistant.dto.StreamDto;
 import com.grsu.teacherassistant.dto.StudentGroupDto;
-import com.grsu.teacherassistant.model.entity.Stream;
-import com.grsu.teacherassistant.model.entity.StudentGroup;
+import com.grsu.teacherassistant.entity.Stream;
+import com.grsu.teacherassistant.entity.StudentGroup;
 import com.grsu.teacherassistant.repository.StreamRepository;
 import com.grsu.teacherassistant.service.api.StreamService;
 import lombok.RequiredArgsConstructor;

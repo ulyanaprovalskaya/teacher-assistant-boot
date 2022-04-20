@@ -1,9 +1,10 @@
 package com.grsu.teacherassistant.service.api;
 
-import com.grsu.teacherassistant.dto.StudentDto;
-import com.grsu.teacherassistant.model.entity.LessonType;
+import com.grsu.teacherassistant.dto.lesson.StudentLessonDto;
+import com.grsu.teacherassistant.dto.student.StudentDto;
+import com.grsu.teacherassistant.dto.student.StudentWithAttendanceDto;
+import com.grsu.teacherassistant.entity.LessonType;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
-
 import java.util.List;
 
 
@@ -20,4 +21,16 @@ public interface StudentService {
     void deleteStudent(Integer id);
 
     void editStudent(StudentDto student);
+
+    List<StudentDto> getPresentStudents(Integer lessonId);
+
+    List<StudentDto> getAbsentStudents(Integer lessonId);
+
+    StudentWithAttendanceDto getStudentAttendance(Integer studentId, Integer lessonId);
+
+    String getTotalSkipsInfo(List<StudentLessonDto> skips);
+
+    String getPracticalSkipsInfo(List<StudentLessonDto> skips);
+
+    String getLectureSkipsInfo(List<StudentLessonDto> skips);
 }

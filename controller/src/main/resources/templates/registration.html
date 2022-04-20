@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="../static/css/registration-style.css" th:href="@{css/registration-style.css}"/>
+</head>
+<body>
+<header th:insert="fragments/menu.html :: menu"></header>
+
+<div class="registration-container">
+  <div id="studentInfo" th:insert="fragments/studentInfo.html :: studentInfo"></div>
+
+  <div id="lessonInfo">
+    <div id="students">
+      <div id="studentsTotal">
+        <span th:text="#{lesson.students.all} "></span>
+        <span id="studentsTotalNo"></span>
+      </div>
+      <div id="studentsPresent">
+        <span th:text="#{lesson.students.present} "></span>
+        <span id="studentsPresentNo"></span>
+      </div>
+      <div id="studentsAbsent">
+        <span th:text="#{lesson.students.absent} "></span>
+        <span id="studentsAbsentNo"></span>
+      </div>
+    </div>
+
+    <div id="lesson">
+      <div id="stream" th:text="${lesson.stream.name}"></div>
+      <div id="lessonNumber" th:text="|${lesson.type.name} 1 из 1|"></div>
+      <div id="lessonDate" th:text="${#temporals.format(lesson.date, 'dd.MM.yyyy')}"></div>
+      <div id="lessonPeriod" th:text="|${lessonNo} ${lesson.schedule.begin} - ${lesson.schedule.end}|"></div>
+    </div>
+  </div>
+
+  <div id="studentsTables">
+    <table>
+      <tr>
+        <td>
+          <table class="table table-bordered table-striped table-hover" id="presentDataTable">
+            <thead>
+            <tr>
+              <th th:text="#{lesson.student.lastName}"></th>
+              <th th:text="#{lesson.student.firstName}"></th>
+              <th>Клик</th>
+            </tr>
+            </thead>
+          </table>
+        </td>
+
+        <td>
+          <table class="table table-bordered table-striped table-hover" id="absentDataTable" style="margin-left: 10px">
+            <thead>
+            <tr>
+              <th>Клик</th>
+              <th th:text="#{lesson.student.lastName}"></th>
+              <th th:text="#{lesson.student.firstName}"></th>
+            </tr>
+            </thead>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="lessonDetails">
+    <button id="timerAndClock" disabled="disabled" class="btn btn-primary">
+      <span id="timer"></span>
+      <span id="clock"></span>
+    </button>
+    <div id="details" class="card">
+      <h5 class="card-header h5" th:text="#{label.additional.info}"></h5>
+      <div class="card-body">
+        <h5 class="card-title" th:text="#{lesson.praepostors}"></h5>
+        <div th:if="${lesson.stream != null}">
+          <th:block th:each="group : ${lesson.stream.groups}">
+            <p class="card-text"
+               th:text="|${group.praepostor.lastName} ${group.praepostor.firstName}, ${group.name}|"></p>
+          </th:block>
+        </div>
+        <div th:if="${lesson.description != null}">
+          <h5 class="card-title" th:text="#{label.additional.lesson.info}"></h5>
+          <p class="card-text" th:text="${lesson.description}"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="../static/js/data-tables.js" th:src="@{js/data-tables.js}"></script>
+<script src="../static/js/timer.js" th:src="@{js/timer.js}"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+<script th:inline="javascript">
+  $(document).ready(function () {
+    let totalSkipsText = [[${totalSkips}]];
+    let lectureSkipsText = /*[[${lectureSkips}]]*/'';
+    let practicalSkipsText = /*[[${practicalSkips}]]*/'';
+
+    tippy('#totalSkips', {
+      content: totalSkipsText,
+      placement: 'bottom',
+      interactive: true
+    });
+
+    if (lectureSkipsText != '') {
+      tippy('#lectureSkips', {
+        content: lectureSkipsText,
+        placement: 'bottom',
+        interactive: true
+      });
+    }
+
+    if (practicalSkipsText != '') {
+      tippy('#practicalSkips', {
+        content: practicalSkipsText,
+        placement: 'bottom',
+        interactive: true
+      });
+    }
+  });
+</script>
+</body>
+</html>
