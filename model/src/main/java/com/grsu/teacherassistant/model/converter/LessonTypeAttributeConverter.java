@@ -6,9 +6,6 @@ import com.grsu.teacherassistant.model.entity.LessonType;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-/**
- * @author Pavel Zaychick
- */
 @Converter(autoApply = true)
 public class LessonTypeAttributeConverter implements AttributeConverter<LessonType, Integer> {
 

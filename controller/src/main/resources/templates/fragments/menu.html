@@ -42,13 +42,13 @@
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#disciplineDialog"><i
                                 class="fa fa-fw fa-paperclip"></i><span
                                 th:text="#{menu.file.new.discipline}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-list-alt"></i><span
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#departmentDialog"><i class="fa fa-fw fa-list-alt"></i><span
                                 th:text="#{menu.file.new.department}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-code-fork"></i><span
+                        <a class="dropdown-item" href="#" onclick="getStreamParameters()"><i class="fa fa-fw fa-code-fork"></i><span
                                 th:text="#{menu.file.new.stream}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-users"></i><span
+                        <a class="dropdown-item" href="#" onclick="getGroupParameters()"><i class="fa fa-fw fa-users"></i><span
                                 th:text="#{menu.file.new.group}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-user"></i><span
+                        <a class="dropdown-item" href="#" onclick="getStudentParameters()"><i class="fa fa-fw fa-user"></i><span
                                 th:text="#{menu.file.new.student}"></span></a>
                         <a class="dropdown-item" href="#"><i class="fa fa-fw fa-file-photo-o"></i><span
                                 th:text="#{menu.load.photo}"></span></a>
@@ -66,11 +66,11 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownShow">
                         <a class="dropdown-item" th:href="@{/disciplines}"><i class="fa fa-fw fa-paperclip"></i><span
                                 th:text="#{menu.show.disciplines}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-list-alt"></i><span
+                        <a class="dropdown-item" th:href="@{/departments}"><i class="fa fa-fw fa-list-alt"></i><span
                                 th:text="#{menu.show.departments}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-code-fork"></i><span
+                        <a class="dropdown-item" th:href="@{/streams}"><i class="fa fa-fw fa-code-fork"></i><span
                                 th:text="#{menu.show.streams}"></span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-users"></i><span
+                        <a class="dropdown-item" th:href="@{/groups}"><i class="fa fa-fw fa-users"></i><span
                                 th:text="#{menu.show.groups}"></span></a>
                         <a class="dropdown-item" th:href="@{/students?sortDirection=DESC&sortField=lastName}"><i
                                 class="fa fa-fw fa-user"></i><span
@@ -128,6 +128,15 @@
     </nav>
 
     <div th:replace="dialogs/disciplineInfo.html :: dialog(dialogId='disciplineDialog', id='', name='', description='')"></div>
+    <div th:replace="dialogs/departmentInfo.html :: dialog(dialogId='departmentDialog', id='', name='', abbreviation='')"></div>
+    <div id="streamInfoHolder"></div>
+    <div id="studentInfoHolder"></div>
+    <div id="groupInfoHolder"></div>
+
+<!--    <link rel="stylesheet" type="text/css" th:href="/@{/webjars/bootstrap/css/bootstrap.min.css}" />-->
+    <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
 </div>
 
 </body>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить поток</title>
+</head>
+<body>
+<div th:fragment="streamDialog" id="streamInfo" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form th:action="@{/streams}" th:object="${stream}" method="post" style="margin: 10px">
+                <div class="form-group">
+                    <input class="form-control" style="display: none" type="text" name="id" th:field="*{id}" th:value="*{id}"/>
+                </div>
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить поток</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" autocomplete="off" th:placeholder="#{stream.name}"
+                           name="name" th:field="*{name}" required="required"/>
+                </div>
+
+                <div class="form-group">
+                    <textarea th:field="*{description}" class="form-control" th:placeholder="#{stream.description}"
+                              name="description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{discipline}" id="discipline" class="form-control" required="required">
+                        <!--                        <option selected th:value="${disciplines[0].id}"><span th:text="#{select.discipline}"></span></option>-->
+                        <option th:each="discipline : ${disciplines}"
+                                th:value="${discipline.id}"
+                                th:utext="${discipline.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{department}" id="department" class="form-control" required="required">
+                        <!--                        <option selected th:value="${departments[0].id}"><span th:text="#{select.department}"></span></option>-->
+                        <option th:each="department : ${departments}"
+                                th:value="${department.id}"
+                                th:utext="${department.name}"></option>
+                    </select>
+                </div>
+
+                <div>
+                    <select size="5" multiple th:field="*{groups}" id="group" class="form-control" required="required">
+                        <option th:each="group : ${groups}"
+                                th:value="${group.id}"
+                                th:utext="${group.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{course}" th:value="*{course}" id="course" th:placeholder="#{stream.info.course}" class="form-control" required="required">
+                        <!--                        <option selected th:value="${departments[0].id}"><span th:text="#{select.department}"></span></option>-->
+                        <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display: flex">
+                    <input id="streamIsActive" type="checkbox" name="streamIsActive"
+                           th:field="*{active}" style="height:25px;width:25px" th:value="*{active}">
+                    <label> Активный поток</label>>
+                </div>
+
+                <div class="form-group">
+                    <input id="expirationDateTime" type="datetime-local" class="form-control" th:field="*{expirationDateTime}" th:value="*{expirationDateTime}"/>
+                </div>
+
+                <div class="form-group">
+                    <input id="lectureAmount" type="number"  min="0" class="form-control" name="lectureAmount"
+                           th:placeholder="#{label.lectureCount}" th:field="*{lectureCount}"  th:value="*{lectureCount}">
+                </div>
+
+                <div class="form-group">
+                    <input id="practicalAmount" type="number" min="0" class="form-control" name="practicalAmount"
+                           th:placeholder="#{label.practicalCount}" th:field="*{practicalCount}"  th:value="*{practicalCount}">
+                </div>
+
+                <div class="form-group">
+                    <input id="laboratoryAmount" type="number" min="0" class="form-control" name="laboratoryAmount"
+                           th:placeholder="#{label.labCount}" th:field="*{labCount}"  th:value="*{labCount}">
+                </div>
+
+                <div class="modal-footer">
+                    <input type="reset" class="btn btn-secondary" data-dismiss="modal" th:value="#{btn.close}"/>
+                    <input type="submit" class="btn btn-primary" th:value="#{btn.save}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- todo add validation-->

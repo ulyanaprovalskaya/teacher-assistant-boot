@@ -8,9 +8,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-/**
- * @author Pavel Zaychick
- */
 @Converter(autoApply = true)
 public class LocalTimeAttributeConverter implements AttributeConverter<LocalTime, String> {
 

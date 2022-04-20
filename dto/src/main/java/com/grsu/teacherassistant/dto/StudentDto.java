@@ -3,6 +3,7 @@ package com.grsu.teacherassistant.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import static com.grsu.teacherassistant.model.constants.Constants.GROUPS_DELIMIT
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class StudentDto {
 
     private Integer id;

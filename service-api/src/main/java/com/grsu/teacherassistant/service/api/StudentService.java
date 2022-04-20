@@ -25,7 +25,13 @@ public interface StudentService {
 
     void editStudent(StudentDto student);
 
-    List<StudentDto> findAllStudents(Page<Student> students);
+    StudentDto getById(Integer id);
+
+    List<StudentDto> getAllByIdInList(List<Integer> studentIds);
+
+    List<StudentDto> getAll();
+
+    Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived);
 
     Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification, String sortDirection, String sortField, boolean isArchived);
 }

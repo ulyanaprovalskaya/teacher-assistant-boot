@@ -52,7 +52,7 @@ public class Stream extends AssistantEntity {
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "STREAM_GROUP",
         joinColumns = @JoinColumn(name = "stream_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))

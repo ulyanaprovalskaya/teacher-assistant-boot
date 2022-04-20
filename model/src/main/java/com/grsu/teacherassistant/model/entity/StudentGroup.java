@@ -45,7 +45,7 @@ public class StudentGroup extends AssistantEntity {
     @ToString.Exclude
     private List<Stream> streams;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "STUDENT_GROUP",
         joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))

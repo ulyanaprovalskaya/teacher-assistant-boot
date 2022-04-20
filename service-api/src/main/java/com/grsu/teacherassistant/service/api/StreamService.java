@@ -15,6 +15,8 @@ public interface StreamService {
 
     void addGroupToStream(StudentGroupDto group, StreamDto stream);
 
+    StreamDto getByStreamId(Integer id);
+
     List<StreamDto> getAll();
 
     List<StreamDto> getAllActive();

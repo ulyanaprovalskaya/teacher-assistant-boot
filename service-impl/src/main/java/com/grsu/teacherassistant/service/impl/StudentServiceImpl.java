@@ -59,6 +59,36 @@ public class StudentServiceImpl implements StudentService {
     public void editStudent(StudentDto studentDto) {
     }
 
+    @Override
+    public StudentDto getById(Integer id) {
+        return modelMapper.map(studentRepository.getById(id), StudentDto.class);
+    }
+
+    @Override
+    public List<StudentDto> getAllByIdInList(List<Integer> studentIds) {
+        return studentRepository.findAllByIdIn(studentIds)
+                .stream()
+                .map(student -> modelMapper.map(student, StudentDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentDto> getAll() {
+        return studentRepository.findAll()
+                .stream()
+                .map(student -> modelMapper.map(student, StudentDto.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.fromString(sortDirection), sortField);
+        if (isArchived) {
+            return studentRepository.getArchivedStudents(pageRequest);
+        }
+        return studentRepository.findAll(pageRequest);
+    }
 
     @Override
     public Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification, String sortDirection, String sortField, boolean isArchived) {
@@ -68,15 +98,4 @@ public class StudentServiceImpl implements StudentService {
         }
         return studentRepository.findAll(studentSpecification, pageRequest);
     }
-
-    @Override
-    public List<StudentDto> findAllStudents(Page<Student> studentPage) {
-        return studentPage
-                .getContent()
-                .stream()
-                .map(student -> modelMapper.map(student, StudentDto.class))
-                .collect(Collectors.toList());
-    }
-
-
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Disciplines</title>
+    <title>Departments</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
@@ -13,22 +13,22 @@
 <table th:fragment="disciplinesFragment" class="table table-stripped table-bordered margin-top10">
     <thead class="thead-light">
     <tr>
-        <th th:text="#{disciplines}" style="text-align:center"></th>
+        <th th:text="#{departments}" style="text-align:center"></th>
         <th th:text="#{option.edit}" style="text-align:center"></th>
         <th th:text="#{option.remove}" style="text-align:center"></th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="discipline : ${disciplines}">
-        <td th:text="${discipline.name}" style="width: 85%"></td>
+    <tr th:each="department : ${departments}">
+        <td th:text="${department.name}" style="width: 85%"></td>
         <td style="text-align:center">
-            <button class="btn btn-outline-info" data-toggle="modal" th:data-target="${#strings.concat('#editDiscipline', discipline.id)}">
+            <button class="btn btn-outline-info" data-toggle="modal" th:data-target="${#strings.concat('#editDepartment', department.id)}">
                 <i class="fa fa-fw fa-pencil"></i></button>
-            <div th:replace="dialogs/disciplineInfo.html :: dialog(dialogId=${#strings.concat('editDiscipline', discipline.id)}, id=${discipline.id},
-             name=${discipline.name}, description=${discipline.description})"></div>
+            <div th:replace="dialogs/departmentInfo.html :: dialog(dialogId=${#strings.concat('editDepartment', department.id)}, id=${department.id},
+             name=${department.name}, abbreviation=${department.abbreviation})"></div>
         </td>
         <td style="text-align:center">
-            <form th:action="@{/disciplines/{id}(id=${discipline.id})}" th:method="delete">
+            <form th:action="@{/departments/{id}(id=${department.id})}" th:method="delete">
                 <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
             </form>
         </td>

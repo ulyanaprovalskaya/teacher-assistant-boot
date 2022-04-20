@@ -2,6 +2,7 @@ package com.grsu.teacherassistant.utils;
 
 import com.grsu.teacherassistant.dto.FilterDto;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,7 +27,7 @@ public class FilterSpecification<T> implements Specification<T> {
                 : predicates.get(0);
     }
 
-    public Predicate buildPredicate(FilterDto filterDTO, Root<T> root, CriteriaBuilder criteriaBuilder) {
+    private Predicate buildPredicate(FilterDto filterDTO, Root<T> root, CriteriaBuilder criteriaBuilder) {
         switch (filterDTO.getComparison()) {
             case equals:
                 return buildEqualsPredicateToCriteria(filterDTO, root, criteriaBuilder);
@@ -42,7 +43,9 @@ public class FilterSpecification<T> implements Specification<T> {
 
     private List<Predicate> buildPredicates(Root<T> root, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
-        filterDtos.forEach(dto -> predicates.add(buildPredicate(dto, root, criteriaBuilder)));
+        if (!CollectionUtils.isEmpty(filterDtos)) {
+            filterDtos.forEach(dto -> predicates.add(buildPredicate(dto, root, criteriaBuilder)));
+        }
         return predicates;
     }
 

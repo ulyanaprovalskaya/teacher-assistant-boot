@@ -1,40 +1,41 @@
 package com.grsu.teacherassistant.controller;
 
-import com.grsu.teacherassistant.dto.Comparison;
 import com.grsu.teacherassistant.dto.FilterDto;
 import com.grsu.teacherassistant.dto.FiltersDto;
+import com.grsu.teacherassistant.dto.StreamDto;
+import com.grsu.teacherassistant.dto.StudentDto;
 import com.grsu.teacherassistant.model.entity.Student;
+import com.grsu.teacherassistant.service.api.GroupService;
 import com.grsu.teacherassistant.service.api.PageRequestService;
 import com.grsu.teacherassistant.service.api.StudentService;
+import com.grsu.teacherassistant.service.mapper.StudentMapper;
 import com.grsu.teacherassistant.utils.FilterSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("/students")
 @RequiredArgsConstructor
 public class StudentController {
+
     private final StudentService studentService;
+    private final StudentMapper studentMapper;
     private final PageRequestService<Student> pageRequestService;
+    private final GroupService groupService;
 
     @GetMapping
     public String showStudents(Model model,
@@ -44,29 +45,51 @@ public class StudentController {
                                @RequestParam(value = "sortDirection", defaultValue = "DESC") String sortDirection,
                                @RequestParam(value = "sortField", defaultValue = "lastName") String sortField) {
         Page<Student> allStudents = studentService
-                .getAllStudents(pageable, null, sortDirection, sortField, isArchived);
+                .getAllStudents(pageable, sortDirection, sortField, isArchived);
         filtersDto.setFilters(Arrays.asList(new FilterDto(), new FilterDto(), new FilterDto()));
-        pageRequestService.buildModel(model, sortDirection, sortField, allStudents)
-                .addAttribute("students", studentService.findAllStudents(allStudents))
-                .addAttribute("isArchived", isArchived)
-                .addAttribute("filtersDto", filtersDto);
+        pageRequestService.buildDefaultPageModel(model, sortDirection, sortField, allStudents, filtersDto)
+                .addAttribute("students", studentMapper.toStudents(allStudents))
+                .addAttribute("isArchived", isArchived);
         return "students";
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/filter")
     public String filterStudents(Model model,
-                               @RequestBody FiltersDto filtersDto,
+                               @ModelAttribute FiltersDto filtersDto,
                                @PageableDefault Pageable pageable,
                                @RequestParam(required = false, value = "isArchived", defaultValue = "false") boolean isArchived,
                                @RequestParam(required = false, value = "sortDirection", defaultValue = "DESC") String sortDirection,
                                @RequestParam(required = false, value = "sortField", defaultValue = "lastName") String sortField) {
         Page<Student> allStudents = studentService
-                .getAllStudents(pageable, new FilterSpecification<>(filtersDto.getFilters()), sortDirection, sortField, isArchived);
-        pageRequestService.buildModel(model, sortDirection, sortField, allStudents)
-                .addAttribute("students", studentService.findAllStudents(allStudents))
-                .addAttribute("isArchived", isArchived)
-                .addAttribute("filtersDto", filtersDto);
+                .getAllStudents(pageable, !CollectionUtils.isEmpty(filtersDto.getFilters()) ? new FilterSpecification<>(filtersDto.getFilters()) : null, sortDirection, sortField, isArchived);
+        pageRequestService.buildDefaultPageModel(model, sortDirection, sortField, allStudents, filtersDto)
+                .addAttribute("students", studentMapper.toStudents(allStudents))
+                .addAttribute("isArchived", isArchived);
         return "students";
+    }
+
+
+    @PostMapping
+    public String createStream(@ModelAttribute("student") StudentDto studentDto) {
+        studentService.createStudent(studentDto);
+        return "redirect:/students";
+    }
+
+    @GetMapping("/parameters")
+    public String getParameters(Model model) {
+        model.addAttribute("student", new StudentDto());
+        model.addAttribute("groups", groupService.getAll());
+        return "dialogs/studentInfo";
+    }
+
+    @GetMapping("/{id}")
+    public String getStudent(Model model, @PathVariable Integer id){
+        StudentDto studentDto = studentService.getById(id);
+        model.addAttribute("groups", studentDto.getGroups());
+//        model.addAttribute("disciplines", Collections.singleton(stream.getDiscipline()));
+//        model.addAttribute("departments", Collections.singleton(stream.getDepartment()));
+        model.addAttribute("student", studentDto);
+        return "dialogs/studentInfo";
     }
 
 }

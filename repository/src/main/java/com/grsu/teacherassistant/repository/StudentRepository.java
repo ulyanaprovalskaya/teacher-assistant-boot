@@ -68,6 +68,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer>, JpaS
 
     @Query(value = "select distinct s from Student s left join s.groups g " +
             " WHERE (g.active = false or (g.expirationDate < current_timestamp or g.expirationDate is not null)) ")
+    Page<Student> getArchivedStudents(Pageable pageable);
+
+    @Query(value = "select distinct s from Student s left join s.groups g " +
+            " WHERE (g.active = false or (g.expirationDate < current_timestamp or g.expirationDate is not null)) ")
     Page<Student> getArchivedStudents(Specification<Student> specification, Pageable pageable);
 
+    List<Student> findAllByIdIn(List<Integer> studentIds);
 }

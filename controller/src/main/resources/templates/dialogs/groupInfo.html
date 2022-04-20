@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить группу</title>
+</head>
+<body>
+<div th:fragment="groupDialog" id="groupInfo" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form th:action="@{/groups}" th:object="${group}" method="post" style="margin: 10px">
+                <div class="form-group">
+                    <input class="form-control" style="display: none" type="text" name="id" th:field="*{id}" th:value="*{id}"/>
+                </div>
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить группу</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" autocomplete="off" th:placeholder="#{group.name}"
+                           name="name" th:field="*{name}" required="required"/>
+                </div>
+
+                <div class="form-group">
+                    <input id="expirationDate" type="datetime-local" class="form-control" th:field="*{expirationDate}" th:value="*{expirationDate}"/>
+                </div>
+
+                <div class="form-group">
+                    <select th:field="*{department}" id="department" class="form-control" required="required">
+                        <!--                        <option selected th:value="${departments[0].id}"><span th:text="#{select.department}"></span></option>-->
+                        <option th:each="department : ${departments}"
+                                th:value="${department.id}"
+                                th:utext="${department.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select size="5" multiple id="allStudents" class="form-control">
+                        <option draggable="true" th:each="student : ${allStudents}"
+                                th:value="${student.id}"
+                                th:utext="${student.firstName} + ' ' + ${student.lastName}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select size="5" multiple th:field="*{students}" id="groupStudents" class="form-control">
+                        <option th:each="student : ${groupStudents}"
+                                th:value="${student.id}"
+                                th:utext="${student.firstName} + ' ' + ${student.lastName}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display: flex">
+                    <input id="groupIsActive" type="checkbox" style="height:25px;width:25px;" name="groupIsActive"
+                    th:field="*{active}"  th:value="*{active}">
+                    <label> Активный поток</label>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="reset" class="btn btn-secondary" data-dismiss="modal" th:value="#{btn.close}"/>
+                    <input type="submit" class="btn btn-primary" th:value="#{btn.save}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- todo add validation-->

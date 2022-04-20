@@ -47,7 +47,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public DisciplineDto getById(Integer id) {
-        return modelMapper.map(disciplineRepository.findById(id), DisciplineDto.class);
+        return modelMapper.map(disciplineRepository.getById(id), DisciplineDto.class);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
@@ -23,12 +24,19 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void createGroup(StudentGroupDto group) {
-        groupRepository.save(modelMapper.map(group, StudentGroup.class));
+        StudentGroup studentGroup = modelMapper.map(group, StudentGroup.class);
+        groupRepository.save(studentGroup);
     }
 
     @Override
     public void deleteGroup(Integer id) {
         groupRepository.deleteById(id);
+    }
+
+    @Override
+    public StudentGroupDto getById(Integer id) {
+        StudentGroup byId = groupRepository.getById(id);
+        return modelMapper.map(byId, StudentGroupDto.class);
     }
 
     @Override
@@ -50,6 +58,14 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<StudentGroupDto> getGroupsByStreamId(Integer id) {
         return groupRepository.findAllByStreamId(id)
+                .stream()
+                .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentGroupDto> getAllByGroupIds(List<Integer> ids) {
+        return groupRepository.findAllByIdIn(ids)
                 .stream()
                 .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
                 .collect(Collectors.toList());

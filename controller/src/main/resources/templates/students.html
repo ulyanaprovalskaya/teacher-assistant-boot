@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Студенты</title>
+    <style type="text/css">
+        input, label {
+            display: block;
+        }
+    </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
@@ -10,48 +15,35 @@
 <body>
 <header th:insert="fragments/menu.html :: menu"></header>
 
-<form action="#" th:action="@{/students}" th:object="${filtersDto}"
+<form th:object="${filtersDto}"
       method="post">
     <fieldset>
-        <input type="submit" id="submitButton" th:value="Save">
-        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
-        <table  class="table table-hover" id="students">
-            <thead>
+<!--        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>-->
+        <table th:fragment="studentsFragment" class="table table-stripped table-bordered margin-top10">
+            <thead class="thead-light">
+            <tr>
+                <th>
+                    <input name="filterParameter" th:onkeyup="fillFilter(0, 'like', 'cardUid')"/>
+                    <a th:href="@{'students?page=' + ${currentPage + 1} + '&sortField=cardUid&sortDirection=' + ${reverseSortDir}}">Номер
+                        студенческого билета</a></th>
+                <th>
+                    <input name="filterParameter" onkeyup="fillFilter(1, 'like', 'lastName')"/>
+                    <a th:href="@{'students?page=' + ${currentPage + 1} + '&sortField=lastName&sortDirection=' + ${reverseSortDir}}">ФИО</a>
+                </th>
+                <th th:text="'Группа'" style="text-align:center"></th>
+            </tr>
             </thead>
             <tbody>
-            <tr th:each="filter, itemStat : *{filters}">
-               <!-- <th th:field="*{}">-->
-                    <input th:id = "filter + ${itemStat.index}"
-                           th:data-index="${itemStat.index}"
-                           th:data-filter="${filter}"
-                           th:field="*{filters[__${itemStat.index}__].valueOfFilterParameter}"
-                           th:onkeyup="fillFilter(this.getAttribute('data-index'), this.getAttribute('data-filter'))"/>
-                </th>
+            <tr th:each="student : ${students}">
+                <td th:text="${student.cardUid}" style="width: 20%"></td>
+                <td th:text="${student.getFullName()}" style="width: 40%"></td>
+                <td th:text="${student.getGroupNames()}" style="width: 40%"></td>
             </tr>
             </tbody>
         </table>
     </fieldset>
 </form>
-
-<table th:fragment="studentsFragment" class="table table-stripped table-bordered margin-top10">
-    <thead class="thead-light">
-    <tr>
-        <th><a th:href="@{'students?page=' + ${currentPage + 1} + '&sortField=cardUid&sortDirection=' + ${reverseSortDir}}">Номер
-            студенческого билета</a></th>
-        <th>
-            <a th:href="@{'students?page=' + ${currentPage + 1} + '&sortField=lastName&sortDirection=' + ${reverseSortDir}}">ФИО</a>
-        </th>
-        <th th:text="'Группа'" style="text-align:center"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="student : ${students}">
-        <td th:text="${student.cardUid}" style="width: 20%"></td>
-        <td th:text="${student.getFullName()}" style="width: 40%"></td>
-        <td th:text="${student.getGroupNames()}" style="width: 40%"></td>
-    </tr>
-    </tbody>
-</table>
 <div th:insert="fragments/pagination.html :: pagination"></div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -64,33 +56,36 @@
         crossorigin="anonymous"></script>
 
 <script th:inline="javascript">
-    // var filters = [[${filtersDto}]];
-    var filterParameters = ['cardUid', 'lastName', '3']
-    function fillFilter(index, filters) {
 
-        let xhr = new XMLHttpRequest();
-        let url = "http://localhost:8081/teacherassistant/students"
-
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "applications/json");
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log('ok');
+    function filterTable() {
+        var filters = document.getElementsByName("filterParameter");
+        console.log("Filter table");
+        console.log(filters);
+        let formData = new FormData();
+        for (let index = 0; index < filters.length; index++) {
+            var value = filters[index].value;
+            if (value !== '') {
+                formData.set('filters[' + index + '].valueOfFilterParameter', value);
+                var comparison = filters[index].title.split(',')[0];
+                console.log(comparison);
+                formData.set('filters[' + index + '].comparison', comparison);
+                formData.set('filters[' + index + '].filterParameter', filters[index].title.split(',')[1]);
             }
         }
 
-        var data = JSON.stringify({"filters" : [{"comparison": "like", "filterParameter": "cardUid", "valueOfFilterParameter": "12"}]});
-        xhr.send(data);
-
-        console.log(index);
-        console.log(filters);
-        filters.filters[index].comparison = 'like';
-        filters.filters[index].filterParameter = filterParameters[index];
-        console.log(filters);
+        fetch("students",
+            {
+                body: formData,
+                method: "post"
+            });
     }
 
-
+    function fillFilter(index, comparison, filterParameter) {
+        var filterParameters = document.getElementsByName("filterParameter");
+        console.log(filterParameters);
+        filterParameters[index].title=comparison + "," + filterParameter;
+        console.log(filterParameters[index].title);
+    }
 </script>
 </body>
 </html>

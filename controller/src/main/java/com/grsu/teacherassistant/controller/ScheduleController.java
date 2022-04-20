@@ -34,7 +34,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping
-    private String showSchedule(Model model, @ModelAttribute("scheduleFilter") ScheduleFilterDto scheduleFilterDto){
+    public String showSchedule(Model model, @ModelAttribute("scheduleFilter") ScheduleFilterDto scheduleFilterDto){
         LocalDate dateFrom = scheduleFilterDto.getDateFrom();
         LocalDate dateTo = scheduleFilterDto.getDateTo();
 
@@ -60,7 +60,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/streams/{id}")
-    private String getGroupsByStreamId(Model model, @PathVariable Integer id) {
+    public String getGroupsByStreamId(Model model, @PathVariable Integer id) {
         model.addAttribute("groups", groupService.getGroupsByStreamId(id));
         return "fragments/filterSelectGroup";
     }
