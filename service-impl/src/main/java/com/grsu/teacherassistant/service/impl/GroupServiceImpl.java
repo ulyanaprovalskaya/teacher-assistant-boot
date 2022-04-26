@@ -37,46 +37,46 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public StudentGroupDto getById(Integer id) {
         StudentGroup byId = groupRepository.getById(id);
-        return modelMapper.map(byId, StudentGroupDto.class);
+        return studentGroupMapper.toDto(byId);
     }
 
     @Override
     public List<StudentGroupDto> getAll() {
-        return ((List<StudentGroup>) groupRepository.findAll())
-                .stream()
-                .map(studentGroupMapper::toDto)
-                .collect(Collectors.toList());
+        return groupRepository.findAll()
+                              .stream()
+                              .map(studentGroupMapper::toDto)
+                              .collect(Collectors.toList());
     }
 
     @Override
     public List<StudentGroupDto> getActive() {
         return groupRepository.findAllByActive(true)
-                .stream()
-                .map(studentGroupMapper::toDto)
-                .collect(Collectors.toList());
+                              .stream()
+                              .map(studentGroupMapper::toDto)
+                              .collect(Collectors.toList());
     }
 
     @Override
     public List<StudentGroupDto> getGroupsByStreamId(Integer id) {
         return groupRepository.findAllByStreamId(id)
-                .stream()
-                .map(studentGroupMapper::toDto)
-                .collect(Collectors.toList());
+                              .stream()
+                              .map(studentGroupMapper::toDto)
+                              .collect(Collectors.toList());
     }
 
     @Override
     public List<StudentGroupDto> getAllByGroupIds(List<Integer> ids) {
         return groupRepository.findAllByIdIn(ids)
-                .stream()
-                .map(studentGroup -> modelMapper.map(studentGroup, StudentGroupDto.class))
-                .collect(Collectors.toList());
+                              .stream()
+                              .map(studentGroupMapper::toDto)
+                              .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public void addStudentToGroup(StudentDto studentDto, StudentGroupDto groupDto) {
         Student student = studentMapper.toEntity(studentDto);
-        StudentGroup group  = studentGroupMapper.toEntity(groupDto);
+        StudentGroup group = studentGroupMapper.toEntity(groupDto);
         group.getStudents().add(student);
     }
 }

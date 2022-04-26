@@ -19,10 +19,7 @@ import com.grsu.teacherassistant.service.filter.StudentFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -31,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
@@ -78,10 +76,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDto getById(Integer id) {
-        return modelMapper.map(studentRepository.getById(id), StudentDto.class);
-    }
-
+    public StudentWithAttendanceDto getById(Integer id) {
+        return studentMapper.toFullDto(studentRepository.getById(id));
     }
 
     @Override
@@ -168,14 +164,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String getPracticalSkipsInfo(List<StudentLessonDto> skips) {
-        String skipsInfo  = getSkipsInfoByLessonType(skips, "Практическое занятие");
+        String skipsInfo = getSkipsInfoByLessonType(skips, "Практическое занятие");
         log.info("Found practical skips info: {}", skipsInfo);
         return skipsInfo;
     }
 
     @Override
     public String getLectureSkipsInfo(List<StudentLessonDto> skips) {
-        String skipsInfo  = getSkipsInfoByLessonType(skips, "Лекция");
+        String skipsInfo = getSkipsInfoByLessonType(skips, "Лекция");
         log.info("Found lecture skips info: {}", skipsInfo);
         return skipsInfo;
     }
@@ -183,7 +179,7 @@ public class StudentServiceImpl implements StudentService {
     private String getSkipsInfoByLessonType(List<StudentLessonDto> skips, String lessonTypeName) {
         StringBuilder sb = new StringBuilder();
         for (StudentLessonDto skip : skips) {
-            if(skip.getType().getName().equals(lessonTypeName)){
+            if (skip.getType().getName().equals(lessonTypeName)) {
                 sb.append(skip.getDate().format(formatters)).append("\n");
             }
         }
@@ -201,35 +197,58 @@ public class StudentServiceImpl implements StudentService {
                 .stream()
                 .map(studentLessonMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
     @Override
     public List<StudentDto> getAllByIdInList(List<Integer> studentIds) {
         return studentRepository.findAllByIdIn(studentIds)
-                .stream()
-                .map(student -> modelMapper.map(student, StudentDto.class))
-                .collect(Collectors.toList());
+                                .stream()
+                                .map(student -> modelMapper.map(student, StudentDto.class))
+                                .collect(Collectors.toList());
     }
 
     @Override
     public List<StudentDto> getAll() {
         return studentRepository.findAll()
-                .stream()
-                .map(student -> modelMapper.map(student, StudentDto.class))
-                .collect(Collectors.toList());
+                                .stream()
+                                .map(student -> modelMapper.map(student, StudentDto.class))
+                                .collect(Collectors.toList());
     }
 
-
     @Override
-    public Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived, String search) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.fromString(sortDirection), sortField);
+    public Page<StudentDto> getAllStudents(Pageable pageable,
+                                           String sortDirection,
+                                           String sortField,
+                                           boolean isArchived,
+                                           String search) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(),
+                                                 pageable.getPageSize(),
+                                                 Sort.Direction.fromString(sortDirection),
+                                                 sortField);
+        Page<Student> students;
         if (isArchived) {
-            return studentRepository.getArchivedStudents(studentFilter.getFilter(search), pageRequest);
+            students = studentRepository.getArchivedStudents(studentFilter.getFilter(search), pageRequest);
+        } else {
+            students = studentRepository.findAll(studentFilter.getFilter(search), pageRequest);
         }
-        return studentRepository.findAll(studentFilter.getFilter(search), pageRequest);
+
+        List<StudentDto> studentDtoList = students
+                .stream()
+                .map(studentMapper::toDto)
+                .collect(Collectors.toList());
+        return new PageImpl<>(studentDtoList, pageable, studentDtoList.size());
     }
 
     @Override
-    public Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification, String sortDirection, String sortField, boolean isArchived) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.fromString(sortDirection), sortField);
+    public Page<Student> getAllStudents(Pageable pageable,
+                                        Specification<Student> studentSpecification,
+                                        String sortDirection,
+                                        String sortField,
+                                        boolean isArchived) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(),
+                                                 pageable.getPageSize(),
+                                                 Sort.Direction.fromString(sortDirection),
+                                                 sortField);
         if (isArchived) {
             return studentRepository.getArchivedStudents(studentSpecification, pageRequest);
         }

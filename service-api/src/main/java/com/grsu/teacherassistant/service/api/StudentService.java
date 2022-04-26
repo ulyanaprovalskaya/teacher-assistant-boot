@@ -4,6 +4,7 @@ import com.grsu.teacherassistant.dto.lesson.StudentLessonDto;
 import com.grsu.teacherassistant.dto.student.StudentDto;
 import com.grsu.teacherassistant.dto.student.StudentWithAttendanceDto;
 import com.grsu.teacherassistant.entity.LessonType;
+import com.grsu.teacherassistant.entity.Student;
 import com.grsu.teacherassistant.repository.projection.AdditionalLesson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,13 +40,13 @@ public interface StudentService {
 
     String getLectureSkipsInfo(List<StudentLessonDto> skips);
 
-    StudentDto getById(Integer id);
+    StudentWithAttendanceDto getById(Integer id);
 
     List<StudentDto> getAllByIdInList(List<Integer> studentIds);
 
     List<StudentDto> getAll();
 
-    Page<Student> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived, String search);
+    Page<StudentDto> getAllStudents(Pageable pageable, String sortDirection, String sortField, boolean isArchived, String search);
 
     Page<Student> getAllStudents(Pageable pageable, Specification<Student> studentSpecification, String sortDirection, String sortField, boolean isArchived);
 }

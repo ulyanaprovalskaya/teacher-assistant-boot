@@ -1,7 +1,7 @@
 package com.grsu.teacherassistant.service.mapper;
 
-import com.grsu.teacherassistant.dto.StudentDto;
-import com.grsu.teacherassistant.model.entity.Student;
+import com.grsu.teacherassistant.dto.student.StudentDto;
+import com.grsu.teacherassistant.entity.Student;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

@@ -1,16 +1,14 @@
 package com.grsu.teacherassistant.service.filter;
 
-import com.grsu.teacherassistant.model.entity.Student;
-import com.grsu.teacherassistant.model.entity.StudentGroup;
-import com.grsu.teacherassistant.model.entity.StudentGroup_;
-import com.grsu.teacherassistant.model.entity.Student_;
+import com.grsu.teacherassistant.entity.Student;
+import com.grsu.teacherassistant.entity.StudentGroup;
+import com.grsu.teacherassistant.entity.StudentGroup_;
+import com.grsu.teacherassistant.entity.Student_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Component

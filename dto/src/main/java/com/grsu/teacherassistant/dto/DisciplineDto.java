@@ -18,5 +18,5 @@ public class DisciplineDto {
     private LocalDateTime createDate;
     private Boolean active;
     private LocalDateTime expirationDate;
-    private List<StreamDto> streams;
+    //private List<StreamDto> streams;
 }

@@ -1,7 +1,7 @@
 package com.grsu.teacherassistant.service.impl;
 
 import com.grsu.teacherassistant.dto.DepartmentDto;
-import com.grsu.teacherassistant.model.entity.Department;
+import com.grsu.teacherassistant.entity.Department;
 import com.grsu.teacherassistant.repository.DepartmentRepository;
 import com.grsu.teacherassistant.service.api.DepartmentService;
 import lombok.RequiredArgsConstructor;

@@ -2,8 +2,6 @@ package com.grsu.teacherassistant.service.api;
 
 import com.grsu.teacherassistant.dto.student.StudentDto;
 import com.grsu.teacherassistant.dto.StudentGroupDto;
-import com.grsu.teacherassistant.model.entity.Student;
-import com.grsu.teacherassistant.model.entity.StudentGroup;
 
 import java.util.List;
 

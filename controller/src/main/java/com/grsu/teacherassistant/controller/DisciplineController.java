@@ -53,7 +53,7 @@ public class DisciplineController {
 
     @GetMapping("/lesson/{id}")
     public String getDisciplineByLessonId(@PathVariable Integer id){
-        disciplineService.getDisciplineByLessonId(id);
+        disciplineService.getByLessonId(id);
         return "redirect:/disciplines";
     }
 }
