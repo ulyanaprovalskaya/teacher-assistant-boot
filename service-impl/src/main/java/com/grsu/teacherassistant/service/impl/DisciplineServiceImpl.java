@@ -8,9 +8,7 @@ import com.grsu.teacherassistant.repository.DisciplineRepository;
 import com.grsu.teacherassistant.service.api.DisciplineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -3,15 +3,12 @@ package com.grsu.teacherassistant.service.impl;
 import com.grsu.teacherassistant.dto.lesson.LessonDto;
 import com.grsu.teacherassistant.dto.lesson.LessonWithSchedule;
 import com.grsu.teacherassistant.exception.EntityNotFoundException;
-import com.grsu.teacherassistant.entity.Lesson;
 import com.grsu.teacherassistant.mapper.LessonMapper;
 import com.grsu.teacherassistant.repository.LessonRepository;
 import com.grsu.teacherassistant.service.api.LessonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +46,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<LessonDto> getAllByDateBetween(LocalDate dateFrom, LocalDate dateTo) {
-        return lessonRepository.getLessonByDateBetween(dateFrom.atTime(00, 00), dateTo.atTime(23, 59))
+        return lessonRepository.getLessonByDateBetween(dateFrom.atTime(0, 0), dateTo.atTime(23, 59))
                                .stream()
                                .map(lessonMapper::toDto)
                                .collect(Collectors.toList());

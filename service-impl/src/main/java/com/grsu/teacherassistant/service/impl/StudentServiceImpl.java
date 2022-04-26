@@ -18,7 +18,6 @@ import com.grsu.teacherassistant.service.api.StudentService;
 import com.grsu.teacherassistant.service.filter.StudentFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ import javax.transaction.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -41,7 +39,6 @@ public class StudentServiceImpl implements StudentService {
     private final ImageService imageService;
     private final StudentMapper studentMapper;
     private final StudentLessonMapper studentLessonMapper;
-    private final ModelMapper modelMapper;
 
     private static final DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -62,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void createStudent(StudentDto student) {
-        studentRepository.save(modelMapper.map(student, Student.class));
+        studentRepository.save(studentMapper.toEntity(student));
     }
 
     @Override
@@ -203,7 +200,7 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAllByIdInList(List<Integer> studentIds) {
         return studentRepository.findAllByIdIn(studentIds)
                                 .stream()
-                                .map(student -> modelMapper.map(student, StudentDto.class))
+                                .map(studentMapper::toDto)
                                 .collect(Collectors.toList());
     }
 
@@ -211,7 +208,7 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAll() {
         return studentRepository.findAll()
                                 .stream()
-                                .map(student -> modelMapper.map(student, StudentDto.class))
+                                .map(studentMapper::toDto)
                                 .collect(Collectors.toList());
     }
 

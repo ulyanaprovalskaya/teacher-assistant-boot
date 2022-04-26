@@ -15,8 +15,4 @@ public class ScheduleDto {
     private LocalTime begin;
     private LocalTime end;
     private Integer number;
-
-    public String getCaption() {
-        return String.format("[%s] %s - %s", number, begin, end);
-    }
 }

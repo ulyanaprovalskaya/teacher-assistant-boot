@@ -4,12 +4,12 @@ import com.grsu.teacherassistant.dto.StreamDto;
 import com.grsu.teacherassistant.dto.StudentGroupDto;
 import com.grsu.teacherassistant.entity.Stream;
 import com.grsu.teacherassistant.entity.StudentGroup;
+import com.grsu.teacherassistant.mapper.StreamMapper;
+import com.grsu.teacherassistant.mapper.StudentGroupMapper;
 import com.grsu.teacherassistant.repository.StreamRepository;
 import com.grsu.teacherassistant.service.api.StreamService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,14 +20,15 @@ import java.util.stream.Collectors;
 public class StreamServiceImpl implements StreamService {
 
     private final StreamRepository streamRepository;
-    private final ModelMapper modelMapper;
+    private final StreamMapper streamMapper;
+    private final StudentGroupMapper studentGroupMapper;
 
     @Override
     public void createStream(StreamDto stream) {
         if (stream.getId() == null) {
             stream.setCreateDate(LocalDateTime.now());
         }
-        streamRepository.save(modelMapper.map(stream, Stream.class));
+        streamRepository.save(streamMapper.toEntity(stream));
     }
 
     @Override
@@ -38,21 +39,21 @@ public class StreamServiceImpl implements StreamService {
     @Override
     @Transactional
     public void addGroupToStream(StudentGroupDto groupDto, StreamDto streamDto) {
-        Stream stream = modelMapper.map(streamDto, Stream.class);
-        StudentGroup group = modelMapper.map(groupDto, StudentGroup.class);
+        Stream stream = streamMapper.toEntity(streamDto);
+        StudentGroup group = studentGroupMapper.toEntity(groupDto);
         stream.getGroups().add(group);
     }
 
     @Override
     public StreamDto getByStreamId(Integer id) {
-        return modelMapper.map(streamRepository.getById(id), StreamDto.class);
+        return streamMapper.toDto(streamRepository.getById(id));
     }
 
     @Override
     public List<StreamDto> getAll() {
         return  streamRepository.findAll()
                 .stream()
-                .map(stream -> modelMapper.map(stream, StreamDto.class))
+                .map(streamMapper::toDto)
                 .collect(Collectors.toList());
     }
 
